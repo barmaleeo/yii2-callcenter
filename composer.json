@@ -29,6 +29,6 @@
     }
   },
   "extra": {
-    "bootstrap": "barmaleeo\\yii2-callcenter\\bootstrap\\CallcenterBootstrap"
+    "bootstrap": "barmaleeo\\callcenter\\CallcenterBootstrap"
   }
 }
