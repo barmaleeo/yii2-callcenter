@@ -21,7 +21,8 @@
 
   "require": {
     "yiisoft/yii2": "~2.0.0",
-    "bower-asset/sip.js": "*"
+    "bower-asset/sip.js": "0.11.6",
+    "npm-asset/jquery": "^2.2"
   },
 
   "autoload": {
