@@ -25,10 +25,10 @@
 
   "autoload": {
     "psr-4": {
-      "callcenter\\": "\\"
+      "barmaleeo\\callcenter\\": "\\"
     }
   },
   "extra": {
-    "bootstrap": "callcenter\\CallcenterBootstrap"
+    "bootstrap": "barmaleeo\\callcenter\\CallcenterBootstrap"
   }
 }

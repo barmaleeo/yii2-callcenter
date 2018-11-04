@@ -6,7 +6,7 @@
  * Time: 21:23
  */
 
-namespace callcenter;
+namespace barmaleeo\callcenter;
 
 use yii\base\BootstrapInterface;
 use yii\base\Application;
@@ -17,6 +17,7 @@ class CallcenterBootstrap implements BootstrapInterface
     {
         $app->on(Application::EVENT_BEFORE_REQUEST, function () {
             // do something here
+            echo "hello";
         });
     }
 }
