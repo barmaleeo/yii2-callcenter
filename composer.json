@@ -29,6 +29,11 @@
       "barmaleeo\\callcenter\\": "\\"
     }
   },
+  "repositories" : {
+    "type": "composer",
+    "url": "https://asset-packagist.org"
+  },
+
   "extra": {
     "bootstrap": "barmaleeo\\callcenter\\CallcenterBootstrap"
   }
