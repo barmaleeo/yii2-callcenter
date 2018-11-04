@@ -6,7 +6,7 @@
  * Time: 21:23
  */
 
-namespace barmaleeo\callcenter;
+namespace callcenter;
 
 use yii\base\BootstrapInterface;
 use yii\base\Application;
