@@ -25,10 +25,10 @@
 
   "autoload": {
     "psr-4": {
-      "callcenter": ""
+      "yii2-callcenter": "\\"
     }
   },
   "extra": {
-    "bootstrap": "barmaleeo\\CallcenterBootstrap"
+    "bootstrap": "CallcenterBootstrap"
   }
 }
