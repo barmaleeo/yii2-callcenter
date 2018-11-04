@@ -25,7 +25,7 @@
 
   "autoload": {
     "psr-4": {
-      "callcenter": "\\"
+      "barmaleeo\\callcenter": "\\"
     }
   },
   "extra": {
