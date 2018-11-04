@@ -11,7 +11,7 @@ namespace barmaleeo\callcenter;
 use yii\base\BootstrapInterface;
 use yii\base\Application;
 
-class MyBootstrapClass implements BootstrapInterface
+class CallcenterBootstrap implements BootstrapInterface
 {
     public function bootstrap($app)
     {
