@@ -15,7 +15,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                use: 'babel-loader',
+                use: '../../npm-asset/babel-loader',
             }
 
         ]
