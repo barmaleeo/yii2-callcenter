@@ -9,3 +9,5 @@ themes/classic/views/
 
 .idea/
 composer.json.js
+/package-lock.json
+/node_modules/

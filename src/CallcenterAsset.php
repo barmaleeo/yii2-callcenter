@@ -13,5 +13,10 @@ use yii\web\AssetBundle;
 
 class CallcenterAsset extends AssetBundle
 {
+    public $sourcePath = '@vendor/barmaleeo/yii2-callcenter/dist';
+
+    public $js = [
+        'js/callcenter.js',
+    ];
 
 }

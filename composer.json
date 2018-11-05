@@ -23,9 +23,7 @@
     "yiisoft/yii2": "~2.0.0",
     "npm-asset/sip.js": "0.11.6",
     "npm-asset/react": "16.6.0",
-    "npm-asset/babel-loader": "*",
-    "npm-asset/babel--core": "*",
-    "npm-asset/babel-preset-env": "*"
+    "npm-asset/react-dom": "*",
   },
 
   "require-dev": {

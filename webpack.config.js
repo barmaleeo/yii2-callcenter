@@ -5,6 +5,7 @@ module.exports = {
     mode: 'development',
     entry: './src/frontend/index.jsx',
     output: {
+        path:   path.join(__dirname + '/dist/js'),
         filename:"callcenter.js"
     },
     resolve: {
@@ -15,7 +16,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                use: '../../npm-asset/babel-loader',
+                use: 'babel-loader',
             }
 
         ]
