@@ -21,7 +21,12 @@
 
   "require": {
     "yiisoft/yii2": "~2.0.0",
-    "npm-asset/sip.js": "0.11.6"
+    "npm-asset/sip.js": "0.11.6",
+    "npm-asset/react": "16.6.0"
+  },
+
+  require-dev:{
+    "npm-asset/@babel/preset-env": "*"
   },
 
   "autoload": {
