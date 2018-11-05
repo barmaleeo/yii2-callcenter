@@ -18,5 +18,8 @@ class CallcenterAsset extends AssetBundle
     public $js = [
         'js/callcenter.js',
     ];
+    public $css = [
+        'css/callcenter.css',
+    ];
 
 }
