@@ -26,6 +26,7 @@
   },
 
   "require-dev": {
+    "npm-asset/@babel/core": "*",
     "npm-asset/@babel/preset-env": "*"
   },
 
