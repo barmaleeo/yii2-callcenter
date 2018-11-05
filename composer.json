@@ -25,7 +25,7 @@
     "npm-asset/react": "16.6.0"
   },
 
-  require-dev:{
+  "require-dev": {
     "npm-asset/@babel/preset-env": "*"
   },
 
