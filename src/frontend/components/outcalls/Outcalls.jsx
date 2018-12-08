@@ -24,7 +24,7 @@ export default class Outcalls extends Component {
                 <table>
                     <tbody>
                 {s.outcalls.map((o,n) => (
-                    <tr>
+                    <tr key={n}>
                         <td>{o.created}</td>
                         <td>{o.type}</td>
                         <td>{o.name}</td>

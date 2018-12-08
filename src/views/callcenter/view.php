@@ -15,8 +15,8 @@ if(isset(Yii::$app->params['callcenter'])){
 }
 
 ?>
-
+<audio id="sound-phone" autoPlay="autoplay"></audio>
 <div id="yii2-callcenter-root"
      data-options='<?=json_encode($params)?>'>
-    Hello-hello-hello!
+    Loading...
 </div>

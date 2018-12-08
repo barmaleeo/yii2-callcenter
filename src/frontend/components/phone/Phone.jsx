@@ -10,11 +10,12 @@ export default class Phone extends Component {
             <div className="cc-phone-outher">
                 <div className="p-o-block-wrapper p-o-logo">
                     <div className="o-l-img">Лого</div>
-                    <div className="o-l-power">Вкл</div>
+                    <div className="o-l-power"
+                         onClick={p.onClickPower}>Вкл</div>
                 </div>
                 <div className="p-o-block-wrapper p-o-number">
                     <div className="o-n-lights">
-                        <div className="n-lighs-ws"></div>
+                        <div className={'n-lighs-ws'+(p.register?' green':'')}></div>
                         <div className="n-lighs-sip"></div>
                         <div className="n-lighs-query"></div>
                     </div>

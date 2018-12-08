@@ -1,0 +1,94 @@
+div.cc-outcalls-outher {
+  background-color: #b3e7f9;
+  width: 100%;
+  flex: 1; }
+
+div.cc-client-outher {
+  background-color: #f9f6f0;
+  width: 100%;
+  flex: 1; }
+
+div.cc-wiki-outher {
+  background-color: #ffe3ec;
+  width: 100%;
+  flex: 1; }
+
+div.cc-phone-outher {
+  background-color: #e7f4f9;
+  width: 100%;
+  height: 100%; }
+  div.cc-phone-outher div.p-o-buttons {
+    display: flex; }
+    div.cc-phone-outher div.p-o-buttons > button {
+      width: 100%; }
+  div.cc-phone-outher div.p-o-logo {
+    display: flex;
+    align-items: center; }
+    div.cc-phone-outher div.p-o-logo > div.o-l-img {
+      height: 48px;
+      flex: 1; }
+    div.cc-phone-outher div.p-o-logo > div.o-l-power {
+      height: 48px;
+      width: 48px;
+      margin-left: 1px; }
+  div.cc-phone-outher div.p-o-number {
+    display: flex;
+    font-family: 'LCDMB';
+    background: #333; }
+    div.cc-phone-outher div.p-o-number > div.o-n-lights {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 87px;
+      padding: 3px; }
+      div.cc-phone-outher div.p-o-number > div.o-n-lights > div {
+        height: 25px;
+        width: 25px;
+        border: 1px solid white;
+        background-color: red; }
+        div.cc-phone-outher div.p-o-number > div.o-n-lights > div.green {
+          background-color: green; }
+    div.cc-phone-outher div.p-o-number > div.o-n-digits {
+      background: #000;
+      height: 48px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px; }
+  div.cc-phone-outher > div.p-o-transfer {
+    display: flex; }
+    div.cc-phone-outher > div.p-o-transfer > button {
+      width: 34px; }
+
+@font-face {
+  font-family: 'LCDMB';
+  src: url("/LCDMB.TTF"); }
+
+#yii2-callcenter-root {
+  height: 100%; }
+  #yii2-callcenter-root div.cc-outher {
+    background: #1b6d85;
+    border: 2px solid #777;
+    display: flex;
+    height: 100%; }
+    #yii2-callcenter-root div.cc-outher > div.c-o-left {
+      height: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column; }
+      #yii2-callcenter-root div.cc-outher > div.c-o-left > div.cc-outcalls-outher {
+        height: 40%; }
+      #yii2-callcenter-root div.cc-outher > div.c-o-left > div.cc-client-outher {
+        flex: 1;
+        height: 100%; }
+    #yii2-callcenter-root div.cc-outher > div.c-o-right {
+      height: 100%;
+      width: 350px;
+      background: #e4b9b9; }
+      #yii2-callcenter-root div.cc-outher > div.c-o-right div.p-o-block-wrapper {
+        margin: 0 1px 1px 1px;
+        border: 1px solid #777;
+        padding: 1px; }
+
