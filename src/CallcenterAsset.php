@@ -22,4 +22,8 @@ class CallcenterAsset extends AssetBundle
         'css/callcenter.css',
     ];
 
+    public $depends = [
+        'yii\web\YiiAsset',
+    ];
+
 }

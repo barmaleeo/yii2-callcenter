@@ -21,6 +21,16 @@ use Yii;
  */
 class Call extends \yii\db\ActiveRecord
 {
+    const STATUS_READY  = 0;
+
+
+    const DIRECTION_UNCALL  = 0;
+    const DIRECTION_OUTCALL = 1;
+
+    public $name;
+    public $phone;
+    public $user_id;
+
     /**
      * {@inheritdoc}
      */
@@ -46,17 +56,36 @@ class Call extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('common', 'ID'),
-            'type_id' => Yii::t('common', 'Type ID'),
-            'phone_id' => Yii::t('common', 'Phone ID'),
-            'status_id' => Yii::t('common', 'Status ID'),
-            'op_id' => Yii::t('common', 'Op ID'),
-            'goal' => Yii::t('common', 'Goal'),
-            'enable_time' => Yii::t('common', 'Enable Time'),
-            'start_time' => Yii::t('common', 'Start Time'),
-            'end_time' => Yii::t('common', 'End Time'),
-            'created' => Yii::t('common', 'Created'),
-            'updated' => Yii::t('common', 'Updated'),
+            'id'            => Yii::t('common', 'ID'),
+            'type_id'       => Yii::t('common', 'Type ID'),
+            'phone_id'      => Yii::t('common', 'Phone ID'),
+            'status_id'     => Yii::t('common', 'Status ID'),
+            'op_id'         => Yii::t('common', 'Op ID'),
+            'goal'          => Yii::t('common', 'Goal'),
+            'enable_time'   => Yii::t('common', 'Enable Time'),
+            'start_time'    => Yii::t('common', 'Start Time'),
+            'end_time'      => Yii::t('common', 'End Time'),
+            'created'       => Yii::t('common', 'Created'),
+            'updated'       => Yii::t('common', 'Updated'),
         ];
+    }
+
+    public static function find()
+    {
+        return parent::find()
+            ->select([
+                'call.id',
+                'call.type_id',
+                'call.status_id',
+                'call.phone_id',
+                'user_phone.phone',
+                'user.id AS user_id',
+                'user.name',
+                'call.created',
+                'call.enable_time',
+            ])
+            ->leftJoin('user_phone','user_phone.id=call.phone_id')
+            ->leftJoin('user','user.id=user_phone.user_id')
+            ->groupBy('call.id');
     }
 }

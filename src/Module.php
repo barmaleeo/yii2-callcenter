@@ -11,5 +11,5 @@ namespace barmaleeo\callcenter;
 
 class Module extends \yii\base\Module
 {
-
+    public $outcallsArray = false;
 }
