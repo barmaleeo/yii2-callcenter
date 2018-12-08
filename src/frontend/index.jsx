@@ -108,6 +108,9 @@ class CallcenterRoot extends Component {
             })
         }
     };
+    onClickCancel = (e) => {
+        const session = this.state.ua.invite('2001@fs.all-in-box.ua');
+    }
     render() {
         const p = this.props;
         const s = this.state;
@@ -123,6 +126,7 @@ class CallcenterRoot extends Component {
                 </div>
                 <div className="c-o-right">
                     <Phone onClickPower={this.onClickPower}
+                           onClickCancel={this.onClickCancel}
                            register={s.ua && s.ua.isRegistered()}/>
                 </div>
             </div>

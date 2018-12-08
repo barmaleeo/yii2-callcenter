@@ -24,7 +24,7 @@ export default class Phone extends Component {
                     </div>
                 </div>
                 <div className="p-o-block-wrapper p-o-buttons">
-                    <button className="btn btn-xl btn-danger">l</button>
+                    <button className="btn btn-xl btn-danger" onClick={p.onClickCancel}>l</button>
                     <button className="btn btn-xl btn-success">l</button>
                 </div>
                 <div className="p-o-block-wrapper p-o-transfer">
