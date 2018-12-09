@@ -31,10 +31,10 @@ class CallcenterRoot extends Component {
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
-            },
-            extraHeaders:[
-                'X-user-domain: ' + 'hhhjjj'//p.sip.sip_host
-            ]
+            }//,
+            // extraHeaders:[
+            //     'X-user-domain: ' + 'hhhjjj'//p.sip.sip_host
+            // ]
         };
 
         s.ua = new SIP.UA({
@@ -130,10 +130,10 @@ class CallcenterRoot extends Component {
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
-            },
-            extraHeaders: [
-                'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
-            ]
+            }//,
+            // extraHeaders: [
+            //     'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
+            // ]
         };
         const self = this;
         const session = this.state.ua.invite('9664@sip.hpg.com.ua', options);
