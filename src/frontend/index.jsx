@@ -133,7 +133,7 @@ class CallcenterRoot extends Component {
             self.state.soundPhone.play();
 
         })
-    },
+    };
     render() {
         const p = this.props;
         const s = this.state;
