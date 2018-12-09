@@ -109,8 +109,31 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
-        const session = this.state.ua.invite('9196@fs.all-in-box.ua');
-    }
+        const options = {
+            sessionDescriptionHandlerOptions: {
+                constraints: {audio: true, video: false},
+            },
+            extraHeaders: [
+                'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
+            ]
+        };
+        const self = this;
+        const session = this.state.ua.invite('9196@fs.all-in-box.ua', options);
+        session.on('accepted', (e, a) => {  // поднятие трубки на том конце
+            console.log('Outgoing  call accepted', e, a);
+            const pc = session.sessionDescriptionHandler.peerConnection;
+            const remoteStream = new MediaStream();
+            pc.getReceivers().forEach(function (receiver) {
+                const track = receiver.track;
+                if (track) {
+                    remoteStream.addTrack(track);
+                }
+            });
+            self.state.soundPhone.srcObject = remoteStream;
+            self.state.soundPhone.play();
+
+        })
+    },
     render() {
         const p = this.props;
         const s = this.state;
