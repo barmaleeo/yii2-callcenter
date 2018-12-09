@@ -33,7 +33,7 @@ class CallcenterRoot extends Component {
                 constraints: {audio: true, video: false},
             },
             extraHeaders:[
-                'X-user-domain: ' + p.sip.sip_host
+                'X-user-domain: ' + 'hhhjjj'//p.sip.sip_host
             ]
         };
 
