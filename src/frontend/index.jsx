@@ -118,7 +118,7 @@ class CallcenterRoot extends Component {
             ]
         };
         const self = this;
-        const session = this.state.ua.invite('9196@sip.hpg.com.ua', options);
+        const session = this.state.ua.invite('5000@sip.hpg.com.ua', options);
         session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a);
             const pc = session.sessionDescriptionHandler.peerConnection;
