@@ -27,13 +27,28 @@ class CallcenterRoot extends Component {
         const p = this.props;
         const s = this.state;
         const c = p.options.sip;
+
+        const options = {
+            sessionDescriptionHandlerOptions: {
+                constraints: {audio: true, video: false},
+            },
+            extraHeaders:[
+                'X-user-domain: ' + p.sip.sip_host
+            ]
+        };
+
         s.ua = new SIP.UA({
             uri: c.uri,
             transportOptions: {
-                wsServers: [c.ws]
+                wsServers: [c.ws],
+                traceSip: true
             },
             authorizationUser: c.name,
-            password: c.password
+            password: c.password,
+            hackIpInContact: true,
+            hackWssInTransport: true,
+            hackViaTcp: true
+
         })
         s.ua.on('invite', (session) => {
             const s = this.state;
