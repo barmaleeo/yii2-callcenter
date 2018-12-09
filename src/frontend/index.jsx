@@ -43,11 +43,14 @@ class CallcenterRoot extends Component {
                 wsServers: [c.ws],
                 traceSip: true
             },
+            log:{
+                level:'debug',
+            },
             authorizationUser: c.name,
             password: c.password,
-            hackIpInContact: true,
-            hackWssInTransport: true,
-            hackViaTcp: true
+            hackIpInContact: false,
+            hackWssInTransport: false,
+            hackViaTcp: false
 
         })
         s.ua.on('invite', (session) => {
