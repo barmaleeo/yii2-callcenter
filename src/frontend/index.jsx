@@ -109,7 +109,7 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
-        const session = this.state.ua.invite('1007@fs.all-in-box.ua');
+        const session = this.state.ua.invite('9196@fs.all-in-box.ua');
     }
     render() {
         const p = this.props;
