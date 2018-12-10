@@ -41,7 +41,8 @@ class CallcenterRoot extends Component {
             uri: c.uri,
             transportOptions: {
                 wsServers: [c.ws],
-                traceSip: true
+                traceSip: true,
+                maxReconnectionAttempts:0
             },
             log:{
                 level:'debug',
