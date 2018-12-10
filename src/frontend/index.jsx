@@ -9,19 +9,24 @@ import SIP      from 'sip.js'
 
 import './index.scss'
 
-const STATE_OFF         = "STATE_OFF";
-const STATE_GO_ON       = "STATE_GO_ON";
-const STATE_READY       = "STATE_READY";
-const STATE_RINGING     = "STATE_RINGING";
-const STATE_PROGRESS    = "STATE_PROGRESS";
-const STATE_CALLING     = "STATE_CALLING";
-const STATE_TALKING     = "STATE_TALKING";
-const STATE_ENDING      = "STATE_ENDING";
-const STATE_BUSY        = "STATE_BUSY";
-const STATE_GO_OFF      = "STATE_GO_OFF";
+export const STATE_OFF         = "STATE_OFF";
+export const STATE_GO_ON       = "STATE_GO_ON";
+export const STATE_READY       = "STATE_READY";
+export const STATE_RINGING     = "STATE_RINGING";
+export const STATE_PROGRESS    = "STATE_PROGRESS";
+export const STATE_CALLING     = "STATE_CALLING";
+export const STATE_GO_TALK     = "STATE_GO_TALK";
+export const STATE_TALKING     = "STATE_TALKING";
+export const STATE_ENDING      = "STATE_ENDING";
+export const STATE_BUSY        = "STATE_BUSY";
+export const STATE_GO_OFF      = "STATE_GO_OFF";
 
 class CallcenterRoot extends Component {
-    state = {soundPhone:document.getElementById('sound-phone'), phoneState:STATE_OFF}
+    state = {
+        soundPhone:document.getElementById('sound-phone'),
+        session:false,
+        phoneState:STATE_OFF,
+    }
     componentDidMount(){
         const self = this;
         const p = this.props;
@@ -42,7 +47,7 @@ class CallcenterRoot extends Component {
             transportOptions: {
                 wsServers: [c.ws],
                 traceSip: true,
-                maxReconnectionAttempts:0
+                maxReconnectionAttempts:1000000000
             },
             log:{
                 level:'debug',
@@ -87,12 +92,19 @@ class CallcenterRoot extends Component {
             })
             session.on('terminated', (cause) => {
                 console.log('incoming call terminated' + cause);
+                if(self.state.phoneState == STATE_GO_OFF){
+                    self.state.phoneState = STATE_OFF;
+                }else{
+                    self.state.phoneState = STATE_READY;
+                }
+                self.state.session = false;
+                self.setState(self.state);
             });
         });
         s.ua.on('registered', () => {
             const s = this.state;
             if(s.phoneState == STATE_GO_ON || s.phoneState == STATE_OFF){
-                s.phoneState = STATE_READY;
+                s.phoneState = STATE_BUSY;
             }
             self.setState(s)
             console.log('Sip phone registered', s)
@@ -128,6 +140,36 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
+        if(this.state.phoneState == STATE_BUSY){
+            this.state.phoneState = STATE_READY;
+            this.setState(this.state)
+        }else if( this.state.session){
+            this.state.session.terminate()
+            this.state.session = false;
+            this.setState(this.state)
+        }
+    };
+    onClickAccept = () => {
+        if(typeof self.state.ua == "object" &&
+            typeof self.state.ua == "function" &&
+            self.state.phoneState == STATE_RINGING
+        ){
+            self.state.phoneState = STATE_GO_TALK;
+            self.state.ua.session.accept()
+            this.setState(this.state)
+        }
+        console.log('cliclAccept')
+    }
+    onClickHold = () => {
+
+    }
+    onClickTransfer = () => {
+
+    }
+    onClickCustom = (phone) => {
+        this.makeCall(phone)
+    }
+    makeCall(phoneNumber){
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
@@ -137,7 +179,7 @@ class CallcenterRoot extends Component {
             // ]
         };
         const self = this;
-        const session = this.state.ua.invite('9664@sip.hpg.com.ua', options);
+        const session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
         session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a, this);
             const pc = session.sessionDescriptionHandler.peerConnection;
@@ -152,7 +194,18 @@ class CallcenterRoot extends Component {
             self.state.soundPhone.play();
 
         })
-    };
+        session.on('terminated',(cause) => {
+            console.log('outgoing call terminated' + cause);
+            if(self.state.phoneState == STATE_GO_OFF){
+                self.state.phoneState = STATE_OFF;
+            }else{
+                self.state.phoneState = STATE_BUSY;
+            }
+            self.state.session = false;
+            self.setState(self.state);
+
+        })
+    }
     render() {
         const p = this.props;
         const s = this.state;
@@ -169,6 +222,10 @@ class CallcenterRoot extends Component {
                 <div className="c-o-right">
                     <Phone onClickPower={this.onClickPower}
                            onClickCancel={this.onClickCancel}
+                           onClickTransfer={this.onClickTransfer}
+                           onClickHold={this.onClickHold}
+                           onClickCustom={this.onClickCustom}
+                           state={s.phoneState}
                            register={s.ua && s.ua.isRegistered()}/>
                 </div>
             </div>
