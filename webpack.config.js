@@ -15,7 +15,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
 module.exports = {
-    mode: 'development',
+    mode: devMode?'development':'production',
+    devtool: devMode?'cheap-inline-module-source-map':'',
     entry: './src/frontend/index.jsx',
     output: {
         path:   path.join(__dirname + '/dist'),

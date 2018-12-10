@@ -150,12 +150,10 @@ class CallcenterRoot extends Component {
         }
     };
     onClickAccept = () => {
-        if(typeof self.state.ua == "object" &&
-            typeof self.state.ua == "function" &&
-            self.state.phoneState == STATE_RINGING
+        if(this.state.session && this.state.phoneState == STATE_RINGING
         ){
-            self.state.phoneState = STATE_GO_TALK;
-            self.state.ua.session.accept()
+            this.state.phoneState = STATE_GO_TALK;
+            this.state.session.accept()
             this.setState(this.state)
         }
         console.log('cliclAccept')
@@ -192,6 +190,8 @@ class CallcenterRoot extends Component {
             });
             self.state.soundPhone.srcObject = remoteStream;
             self.state.soundPhone.play();
+            self.state.phoneState = STATE_TALKING;
+            self.setState(self.state)
 
         })
         session.on('terminated',(cause) => {
