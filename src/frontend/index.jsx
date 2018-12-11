@@ -107,7 +107,7 @@ class CallcenterRoot extends Component {
         s.ua.on('registered', () => {
             const s = this.state;
             if(s.phoneState == STATE_GO_ON || s.phoneState == STATE_OFF){
-                s.phoneState = STATE_BUSY;
+                s.phoneState = STATE_READY;
             }
             self.setState(s)
             console.log('Sip phone registered', s)
@@ -184,7 +184,7 @@ class CallcenterRoot extends Component {
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
         self.state.session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
-        session.on('progress', (response) => {
+        self.state.session.on('progress', (response) => {
             if(self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
                 self.setState(self.state)
