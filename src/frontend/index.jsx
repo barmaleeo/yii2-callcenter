@@ -171,7 +171,17 @@ class CallcenterRoot extends Component {
     onClickCustom = (phone) => {
         this.makeCall(phone)
     }
+    onClickCall = (phone) => {
+        this.makeCall(phone);
+    }
+    onClickInfo = (userId) => {
+        console.log('clickInfo', userId)
+    }
     makeCall(phoneNumber){
+        const self = this;
+        if(self.state.phoneState != STATE_READY){
+            return;
+        }
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
@@ -180,7 +190,6 @@ class CallcenterRoot extends Component {
             //     'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
             // ]
         };
-        const self = this;
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
         self.state.session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
@@ -227,7 +236,9 @@ class CallcenterRoot extends Component {
                 <audio ref="soundPhoneRing" src="/sound/phone_ring.mp3" loop />
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
                 <div className="c-o-left">
-                    <Outcalls/>
+                    <Outcalls state={s.phoneState}
+                              onClickInfo={this.onClickInfo}
+                              onClickCall={this.onClickCall}/>
                     <Client/>
                     <Wiki/>
                 </div>

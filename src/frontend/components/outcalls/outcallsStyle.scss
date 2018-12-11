@@ -2,4 +2,39 @@ div.cc-outcalls-outher{
   background-color: #b3e7f9;
   width: 100%;
   flex:1;
+  padding-right: 13px;
+  overflow-y: auto;
+  table.outcalls{
+    tr:nth-child(even) {
+      background: #D2E9FF;
+    }
+    td{
+      padding-top:0;
+      padding-bottom:0;
+      vertical-align: middle;
+    }
+    td.o-date{  min-width: 130px; width:130px;  max-width: 130px;  }
+    td.o-status{  min-width: 35px; width: 35px;  max-width: 35px;  }
+    td.o-desc{
+      min-width: 35px;
+      width: 35px;
+      max-width: 35px;
+      font-size: 20px;
+      color: #0040bd;
+      transition: color 0.1s;
+      padding:0;
+      cursor:pointer;
+      >span {
+        line-height: inherit;
+      }
+      &:hover{
+        color: #004dff;
+        transition: color 0.1s;
+      }
+    }
+    td.o-type{  min-width: 450px; width: 450px;  max-width: 450px;  }
+    td.o-attempt{  min-width: 26px; width: 26px;  max-width: 26px; text-align: center }
+    td.o-phone{  min-width: 100px; width: 100px;  max-width: 100px; padding:0 5px; }
+    td.o-call-button{  min-width: 100px; width: 100px;  max-width: 100px; padding:0; }
+  }
 }
