@@ -1,7 +1,20 @@
 import React, {Component} from 'react';
 
 import './phoneStyle.scss'
-import {STATE_RINGING, STATE_GO_TALK, STATE_TALKING, STATE_ENDING, STATE_BUSY} from '../../index';
+import {
+    STATE_OFF,
+    STATE_GO_ON,
+    STATE_READY,
+    STATE_CALLING,
+    STATE_PROGRESS,
+    STATE_RINGING,
+    STATE_GO_TALK,
+    STATE_TALKING,
+    STATE_ENDING,
+    STATE_BUSY,
+    STATE_GO_OFF
+} from '../../constants/phoneStates';
+
 
 export default class Phone extends Component {
     render() {
