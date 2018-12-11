@@ -109,6 +109,7 @@ class CallcenterRoot extends Component {
             const s = this.state;
             if(s.phoneState == STATE_GO_ON || s.phoneState == STATE_OFF){
                 s.phoneState = STATE_READY;
+                s.display = '';
             }
             self.setState(s)
             console.log('Sip phone registered', s)
@@ -147,6 +148,7 @@ class CallcenterRoot extends Component {
         console.log('clickCancel', this)
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
+            this.state.display = '';
             this.setState(this.state)
         }else if(this.state.session){
             this.state.session.terminate()
