@@ -143,10 +143,11 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
+        console.log('clickCancel', this)
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
             this.setState(this.state)
-        }else if( this.state.session){
+        }else if(this.state.session){
             this.state.session.terminate()
             this.state.session = false;
             this.setState(this.state)
@@ -182,14 +183,14 @@ class CallcenterRoot extends Component {
         const self = this;
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
-        const session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
+        self.state.session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
         session.on('progress', (response) => {
             if(self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
                 self.setState(self.state)
             }
         })
-        session.on('accepted', (e, a) => {  // поднятие трубки на том конце
+        self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a, this);
             const pc = session.sessionDescriptionHandler.peerConnection;
             const remoteStream = new MediaStream();
@@ -205,7 +206,7 @@ class CallcenterRoot extends Component {
             self.setState(self.state)
 
         })
-        session.on('terminated',(cause) => {
+        self.state.session.on('terminated',(cause) => {
             console.log('outgoing call terminated' + cause);
             if(self.state.phoneState == STATE_GO_OFF){
                 self.state.phoneState = STATE_OFF;
