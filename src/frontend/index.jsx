@@ -192,7 +192,7 @@ class CallcenterRoot extends Component {
         })
         self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a, this);
-            const pc = session.sessionDescriptionHandler.peerConnection;
+            const pc = self.state.session.sessionDescriptionHandler.peerConnection;
             const remoteStream = new MediaStream();
             pc.getReceivers().forEach(function (receiver) {
                 const track = receiver.track;
