@@ -12,9 +12,9 @@ import './index.scss'
 export const STATE_OFF         = "STATE_OFF";
 export const STATE_GO_ON       = "STATE_GO_ON";
 export const STATE_READY       = "STATE_READY";
-export const STATE_RINGING     = "STATE_RINGING";
-export const STATE_PROGRESS    = "STATE_PROGRESS";
 export const STATE_CALLING     = "STATE_CALLING";
+export const STATE_PROGRESS    = "STATE_PROGRESS";
+export const STATE_RINGING     = "STATE_RINGING";
 export const STATE_GO_TALK     = "STATE_GO_TALK";
 export const STATE_TALKING     = "STATE_TALKING";
 export const STATE_ENDING      = "STATE_ENDING";
@@ -177,7 +177,15 @@ class CallcenterRoot extends Component {
             // ]
         };
         const self = this;
+        self.state.phoneState = STATE_CALLING;
+        self.setState(self.state)
         const session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
+        session.on('progress', (response) => {
+            if(self.state.phoneState == STATE_CALLING){
+                self.state.phoneState = STATE_PROGRESS;
+                self.setState(self.state)
+            }
+        })
         session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a, this);
             const pc = session.sessionDescriptionHandler.peerConnection;

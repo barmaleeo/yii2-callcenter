@@ -10,7 +10,7 @@ export default class Phone extends Component {
         const ps = p.state;
         const cancelEnabled = (ps == STATE_RINGING || ps == STATE_TALKING ||
             ps == STATE_GO_TALK || ps == STATE_ENDING || ps == STATE_BUSY)
-        console.log()
+        console.log('Phone render ', cancelEnabled, ps)
         return (
             <div className="cc-phone-outher">
                 <div className="p-o-block-wrapper p-o-logo">
