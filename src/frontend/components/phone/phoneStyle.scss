@@ -42,7 +42,7 @@ div.cc-phone-outher{
         }
       }
     }
-    >div.o-n-digits{
+    >div.o-n-display{
       background: #000;
       height: 48px;
       flex:1;
@@ -50,6 +50,30 @@ div.cc-phone-outher{
       align-items: center;
       justify-content: center;
       font-size: 30px;
+      span.d-f-data {
+        color: #41f341;
+
+        &.blink {
+          -webkit-animation: waiting-call-container 0.4s linear infinite;
+          animation: waiting-call-container 0.4s linear infinite;
+        }
+        @-webkit-keyframes waiting-call-container {
+          50% {
+            color: #333;
+          }
+          100% {
+            color: #41f341;
+          }
+        }
+        @keyframes waiting-call-container {
+          50% {
+            color: #333;
+          }
+          100% {
+            color: #41f341;
+          }
+        }
+      }
     }
   }
   >div.p-o-transfer{

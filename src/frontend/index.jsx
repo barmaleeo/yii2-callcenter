@@ -29,6 +29,7 @@ class CallcenterRoot extends Component {
         soundPhone:document.getElementById('sound-phone'),
         session:false,
         phoneState:STATE_OFF,
+        display:'',
     }
     componentDidMount(){
         const self = this;
@@ -98,7 +99,7 @@ class CallcenterRoot extends Component {
                 if(self.state.phoneState == STATE_GO_OFF){
                     self.state.phoneState = STATE_OFF;
                 }else{
-                    self.state.phoneState = STATE_READY;
+                    self.state.phoneState = STATE_BUSY;
                 }
                 self.state.session = false;
                 self.setState(self.state);
@@ -190,6 +191,7 @@ class CallcenterRoot extends Component {
             //     'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
             // ]
         };
+        self.state.display = phoneNumber;
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
         self.state.session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
@@ -248,6 +250,7 @@ class CallcenterRoot extends Component {
                            onClickTransfer={this.onClickTransfer}
                            onClickHold={this.onClickHold}
                            onClickCustom={this.onClickCustom}
+                           display={s.display}
                            state={s.phoneState}
                            register={s.ua && s.ua.isRegistered()}/>
                 </div>

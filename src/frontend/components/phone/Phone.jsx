@@ -17,11 +17,36 @@ import {
 
 
 export default class Phone extends Component {
+    getDisplayValue = () => {
+        const data  = this.props.display + '';
+
+        const empty = '888888888888888';
+        const el = empty.length;
+        const dl = data.length
+        const ps = this.props.state;
+        const blink = ps == STATE_PROGRESS ||ps == STATE_RINGING || ps == STATE_CALLING || ps == STATE_GO_TALK;
+        if(dl>el){
+            return (
+                <span className="n-d-full">
+                    <span className={'d-f-data'+(blink?' blink':'')}>{data.substring(0,el)}</span>
+                </span>)
+        }
+
+        const bl = Math.floor((el-dl)/2);
+        const al = el - bl - dl;
+        return (
+            <span className="n-d-full">
+                {empty.substring(0,bl)}
+                <span className={'d-f-data'+(blink?' blink':'')}>{data}</span>
+                {empty.substring(0, al)}
+            </span>)
+
+    }
     render() {
         const p = this.props;
         const s = this.state;
         const ps = p.state;
-        const cancelEnabled = (ps == STATE_RINGING || ps == STATE_TALKING ||
+        const cancelEnabled = (ps == STATE_PROGRESS || ps == STATE_RINGING || ps == STATE_TALKING ||
             ps == STATE_GO_TALK || ps == STATE_ENDING || ps == STATE_BUSY)
         console.log('Phone render ', cancelEnabled, ps)
         return (
@@ -37,8 +62,8 @@ export default class Phone extends Component {
                         <div className={'n-lighs-sip'+(p.register?' green':'')}></div>
                         <div className="n-lighs-query"></div>
                     </div>
-                    <div className="o-n-digits">
-                        <span>88888888888888</span>
+                    <div className="o-n-display">
+                        {this.getDisplayValue()}
                     </div>
                 </div>
                 <div className="p-o-block-wrapper p-o-buttons">
