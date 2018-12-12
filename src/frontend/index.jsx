@@ -106,6 +106,8 @@ class CallcenterRoot extends Component {
                 }else{
                     self.state.phoneState = STATE_BUSY;
                 }
+                self.refs.soundPhoneRing.pause();
+                self.refs.soundPhoneRing.currentTime = 0;
                 self.state.session = false;
                 self.setState(self.state);
             });
@@ -165,7 +167,7 @@ class CallcenterRoot extends Component {
             this.setState(this.state)
         }
     };
-    onClickAccept = () => {
+    onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
             this.state.phoneState = STATE_GO_TALK;
             this.state.session.accept()
@@ -257,6 +259,7 @@ class CallcenterRoot extends Component {
                 </div>
                 <div className="c-o-right">
                     <Phone onClickPower={this.onClickPower}
+                           onClickAnswer={this.onClickAnswer}
                            onClickCancel={this.onClickCancel}
                            onClickTransfer={this.onClickTransfer}
                            onClickHold={this.onClickHold}

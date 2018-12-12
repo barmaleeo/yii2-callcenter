@@ -9580,7 +9580,7 @@ function (_Component) {
       }
     });
 
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onClickAccept", function () {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onClickAnswer", function () {
       if (_this.state.session && _this.state.phoneState == _constants_phoneStates__WEBPACK_IMPORTED_MODULE_7__["STATE_RINGING"]) {
         _this.state.phoneState = _constants_phoneStates__WEBPACK_IMPORTED_MODULE_7__["STATE_GO_TALK"];
 
