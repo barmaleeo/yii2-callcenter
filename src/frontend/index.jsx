@@ -69,8 +69,9 @@ class CallcenterRoot extends Component {
             const s = this.state;
             if(s.phoneState == STATE_READY){
                 self.refs.soundPhoneRing.play();
+                s.session = session;
                 s.phoneState = STATE_RINGING;
-                s.display = session.remoteIdentity.displayName;
+                s.display = s.session.remoteIdentity.displayName;
                 self.setState(s);
             }
             //session.accept();
@@ -165,8 +166,7 @@ class CallcenterRoot extends Component {
         }
     };
     onClickAccept = () => {
-        if(this.state.session && this.state.phoneState == STATE_RINGING
-        ){
+        if(this.state.session && this.state.phoneState == STATE_RINGING){
             this.state.phoneState = STATE_GO_TALK;
             this.state.session.accept()
             this.setState(this.state)
