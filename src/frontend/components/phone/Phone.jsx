@@ -17,6 +17,28 @@ import {
 
 
 export default class Phone extends Component {
+    state = {ajaxNum:0, ajaxError:false};
+    componentDidMount = () => {
+        //перехватываем все запросы ajax от офиса
+        let self = this;
+        $(document).ajaxSend(function (evt, request, settings) {
+            self.state.ajaxNum++;
+            self.setState(self.state);
+        }).ajaxSuccess(function (evt, request, settings) {
+            if(self.state.ajaxNum>0){
+                self.state.ajaxNum--;
+            }
+            self.state.ajaxError = false;
+            self.setState(self.state);
+        }).ajaxError(function (evt, request, settings) {
+            if(self.state.ajaxNum>0){
+                self.state.ajaxNum--;
+            }
+            self.state.ajaxError = true;
+            self.setState(self.state);
+        });
+
+    }
     getDisplayValue = () => {
         const data  = this.props.display + '';
 
@@ -72,6 +94,19 @@ export default class Phone extends Component {
             default:
                 powerClass = ' green';
         }
+        
+        let ajaxBg;
+        let ajaxTitle;
+        if(s.ajaxError){
+            ajaxBg = 'red';
+            ajaxTitle = 'Последний запрос к серверу выполнен с ошибкой.';
+        }else if(s.ajaxNum>0){
+            ajaxBg = 'yellow';
+            ajaxTitle = 'Запрос к серверу выполняется.';
+        }else{
+            ajaxBg = '#008000';
+            ajaxTitle = 'Система работает нормально. Запросы к серверу выполняются без ошибок.';
+        }
         return (
             <div className="cc-phone-outher">
                 <div className="p-o-block-wrapper p-o-logo">
@@ -86,7 +121,7 @@ export default class Phone extends Component {
                     <div className="o-n-lights">
                         <div className="n-lighs-ws"></div>
                         <div className={'n-lighs-sip'+(p.register?' green':'')}></div>
-                        <div className="n-lighs-query"></div>
+                        <div className="n-lighs-query" title={ajaxTitle} style={{background:ajaxBg}}/>
                     </div>
                     <div className="o-n-display">
                         {this.getDisplayValue()}

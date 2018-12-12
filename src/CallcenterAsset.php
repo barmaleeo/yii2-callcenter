@@ -22,6 +22,14 @@ class CallcenterAsset extends AssetBundle
         'css/callcenter.css',
     ];
 
+    public function init()
+    {
+        if(isset(\Yii::$app->params['callcenter']['client']['depends'])){
+            $this->depends[] = \Yii::$app->params['callcenter']['client']['depends'];
+        }
+        parent::init();
+    }
+
     public $depends = [
         'yii\web\YiiAsset',
     ];

@@ -96,6 +96,7 @@ class CallcenterRoot extends Component {
                 console.log('Incoming call accepted', session);
             });
             session.on('failed', function (e) {
+                
             })
             session.on('bye', function (e) {
             })
@@ -258,7 +259,7 @@ class CallcenterRoot extends Component {
                     <Outcalls state={s.phoneState}
                               onClickInfo={this.onClickInfo}
                               onClickCall={this.onClickCall}/>
-                    <Client/>
+                    <Client options={o}/>
                     <Wiki/>
                 </div>
                 <div className="c-o-right">

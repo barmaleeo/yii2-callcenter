@@ -6,7 +6,6 @@
  * Time: 01:55
  */
 
-\barmaleeo\callcenter\CallcenterAsset::register($this);
 
 if(isset(Yii::$app->params['callcenter'])){
     $params = Yii::$app->params['callcenter'];
@@ -16,6 +15,9 @@ if(isset(Yii::$app->params['callcenter'])){
 if(isset($params['sip']['source'])){
     $params['sip'] = array_merge($params['sip'], $params['sip']['source']());
 }
+
+\barmaleeo\callcenter\CallcenterAsset::register($this);
+
 
 ?>
 <audio id="sound-phone" autoPlay="autoplay"></audio>
