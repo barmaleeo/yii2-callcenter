@@ -48,7 +48,7 @@ class CallcenterRoot extends Component {
         };
 
         s.ua = new SIP.UA({
-            uri: c.uri,
+            uri: c.name+'@'+c.url,
             transportOptions: {
                 wsServers: [c.ws],
                 traceSip: true,

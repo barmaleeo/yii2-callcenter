@@ -13,6 +13,9 @@ if(isset(Yii::$app->params['callcenter'])){
 }else{
     $params = [];
 }
+if(isset($params['sip']['source'])){
+    $params['sip'] = array_merge($params['sip'], $params['sip']['source']());
+}
 
 ?>
 <audio id="sound-phone" autoPlay="autoplay"></audio>
