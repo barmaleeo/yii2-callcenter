@@ -65,18 +65,18 @@ class CallcenterRoot extends Component {
 
         })
         s.ua.on('invite', (session) => {
+            const self = this;
             const s = this.state;
             if(s.phoneState == STATE_READY){
                 self.refs.soundPhoneRing.play();
                 s.phoneState = STATE_RINGING;
-                s.display = 'hhhhjj';
+                s.display = session.remoteIdentity.displayName;
                 self.setState(s);
             }
             //session.accept();
 
             session.on('accepted', function (e) {
 
-                //self.props.phoneActions.setTalking();
                 self.refs.soundPhoneRing.pause();
                 self.refs.soundPhoneRing.currentTime = 0;
 
@@ -90,6 +90,8 @@ class CallcenterRoot extends Component {
                 });
                 s.soundPhone.srcObject = remoteStream;
 
+                s.phoneState = STATE_RINGING;
+                self.setState(s);
                 console.log('Incoming call accepted', session);
             });
             session.on('failed', function (e) {
