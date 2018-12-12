@@ -46,15 +46,41 @@ export default class Phone extends Component {
         const p = this.props;
         const s = this.state;
         const ps = p.state;
+        
+        let logo = '';
+        let style;
+        if(p.options.logo){
+            const l = p.options.logo;
+            if(typeof l == 'object'){
+                style = {backgroundColor:l.bgColor, padding:l.padding};
+                logo = <img className="yii2-callcenter-logo" src={l.url}/>
+            }
+        }
+        
         const cancelEnabled = (ps == STATE_PROGRESS || ps == STATE_RINGING || ps == STATE_TALKING ||
             ps == STATE_GO_TALK || ps == STATE_ENDING || ps == STATE_BUSY)
         console.log('Phone render ', cancelEnabled, ps)
+        let powerClass;
+        switch (ps){
+            case STATE_OFF:
+                powerClass = " red";
+                break;
+            case STATE_GO_OFF:
+            case STATE_GO_ON:
+                powerClass = ' disabled';
+                break;
+            default:
+                powerClass = ' green';
+        }
         return (
             <div className="cc-phone-outher">
                 <div className="p-o-block-wrapper p-o-logo">
-                    <div className="o-l-img">Лого</div>
-                    <div className="o-l-power"
-                         onClick={p.onClickPower}>Вкл</div>
+                    <div className="o-l-lines">0</div>
+                    <div className="o-l-img" style={style}>{logo}</div>
+                    <div className={'o-l-power'+powerClass}
+                         onClick={p.onClickPower}>
+                        <span className="glyphicon glyphicon-off"/>
+                    </div>
                 </div>
                 <div className="p-o-block-wrapper p-o-number">
                     <div className="o-n-lights">

@@ -11,14 +11,44 @@ div.cc-phone-outher{
   div.p-o-logo{
     display:flex;
     align-items: center;
+    >div.o-l-lines{
+      height: 48px;
+      width: 48px;
+      margin-right:1px;
+      background: black;
+      font-family: 'LCDMB';
+      text-align: center;
+      line-height: 48px;
+      font-size: 30px;
+    }
     >div.o-l-img{
       height: 48px;
       flex:1;
+      text-align: center;
+      line-height: 48px;
+      >img{
+        max-width: 100%;
+        max-height: 100%;
+      }
     }
     >div.o-l-power{
       height: 48px;
       width: 48px;
       margin-left:1px;
+      color: white;
+      line-height: 55px;
+      font-size: 35px;
+      text-align: center;
+      border-radius: 5px;
+      &.red{
+        background: red;
+      }
+      &.green{
+        background: #24b23c;
+      }
+      &.disabled{
+        background: #bbeec8;
+      }
     }
   }
   div.p-o-number{

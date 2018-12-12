@@ -9,6 +9,7 @@
 namespace barmaleeo\callcenter\controllers;
 
 use barmaleeo\callcenter\models\Call;
+use barmaleeo\callcenter\models\CallType;
 
 class CallcenterController extends \yii\base\Controller
 {
@@ -28,7 +29,11 @@ class CallcenterController extends \yii\base\Controller
                 ->asArray()
                 ->all();
         }
-
-        \Yii::$app->response->data = json_encode($outcalls);
+        $types = CallType::find()->orderBy('id')->asArray()->all();
+        $res = [
+            'outcalls'  => $outcalls,
+            'types'     => $types,
+        ];
+        \Yii::$app->response->data = json_encode($res);
     }
 }

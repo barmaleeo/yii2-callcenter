@@ -35,7 +35,8 @@ class CallcenterRoot extends Component {
         const self = this;
         const p = this.props;
         const s = this.state;
-        const c = p.options.sip;
+        const o = p.options;
+        const c = o.sip;
 
         const options = {
             sessionDescriptionHandlerOptions: {
@@ -68,7 +69,8 @@ class CallcenterRoot extends Component {
             if(s.phoneState == STATE_READY){
                 self.refs.soundPhoneRing.play();
                 s.phoneState = STATE_RINGING;
-                self.SetState(s);
+                s.display = 'hhhhjj';
+                self.setState(s);
             }
             //session.accept();
 
@@ -127,6 +129,10 @@ class CallcenterRoot extends Component {
         s.ua.on('registrationFailed', (response, cause) => {
             const s = this.state;
             console.log('Sip phone registration failed', cause)
+            if(s.phoneState == STATE_GO_ON){
+                s.phoneState = STATE_OFF;
+            }
+            self.setState(s)
         })
     }
     onClickPower = (e) => {
@@ -234,6 +240,7 @@ class CallcenterRoot extends Component {
     render() {
         const p = this.props;
         const s = this.state;
+        const o = p.options;
         return (
             <div className="cc-outher">
                 <audio ref="soundPhoneWait" src="/sound/phone_wait.mp3" loop />
@@ -254,6 +261,7 @@ class CallcenterRoot extends Component {
                            onClickCustom={this.onClickCustom}
                            display={s.display}
                            state={s.phoneState}
+                           options={o}
                            register={s.ua && s.ua.isRegistered()}/>
                 </div>
             </div>
