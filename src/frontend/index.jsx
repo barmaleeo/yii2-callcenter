@@ -91,7 +91,7 @@ class CallcenterRoot extends Component {
                 });
                 s.soundPhone.srcObject = remoteStream;
 
-                s.phoneState = STATE_RINGING;
+                s.phoneState = STATE_TALKING;
                 self.setState(s);
                 console.log('Incoming call accepted', session);
             });
@@ -169,12 +169,12 @@ class CallcenterRoot extends Component {
     };
     onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
-            this.state.phoneState = STATE_GO_TALK;
             this.state.session.accept({
                 sessionDescriptionHandlerOptions: {
                     constraints: {audio: true, video: false},
                 },
             })
+            this.state.phoneState = STATE_GO_TALK;
             this.setState(this.state)
         }
         console.log('cliclAccept')
@@ -202,15 +202,15 @@ class CallcenterRoot extends Component {
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
-            }//,
-            // extraHeaders: [
-            //     'X-user-domain: ' + 'hpg-domain'//p.sip.sip_host
-            // ]
+            },
+             extraHeaders: [
+                 'X-user-domain: ' + this.props.options.sip.url,
+             ]
         };
         self.state.display = phoneNumber;
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
-        self.state.session = this.state.ua.invite(phoneNumber + '@sip.hpg.com.ua', options);
+        self.state.session = this.state.ua.invite(phoneNumber + '@'+this.props.options.sip.url, options);
         self.state.session.on('progress', (response) => {
             if(self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
