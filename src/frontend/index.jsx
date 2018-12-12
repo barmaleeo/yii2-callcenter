@@ -170,7 +170,11 @@ class CallcenterRoot extends Component {
     onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
             this.state.phoneState = STATE_GO_TALK;
-            this.state.session.accept()
+            this.state.session.accept({
+                sessionDescriptionHandlerOptions: {
+                    constraints: {audio: true, video: false},
+                },
+            })
             this.setState(this.state)
         }
         console.log('cliclAccept')
