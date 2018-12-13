@@ -189,7 +189,8 @@ class CallcenterRoot extends Component {
     onClickCustom = (phone) => {
         this.makeCall(phone)
     }
-    onClickCall = (phone) => {
+    onClickCall = (phone, uid, call_id) => {
+        this.selectClient(uid)
         this.makeCall(phone);
     }
     onClickInfo = (userId) => {
@@ -203,7 +204,7 @@ class CallcenterRoot extends Component {
             window[this.props.options.client.select](id)
          }
     }
-    makeCall(phoneNumber){
+    makeCall(phoneNumber, call_id){
         const self = this;
         if(self.state.phoneState != STATE_READY){
             return;
@@ -214,6 +215,7 @@ class CallcenterRoot extends Component {
             },
              extraHeaders: [
                  'X-user-domain: ' + this.props.options.sip.url,
+                 'X-call-id: ' + call_id,
              ]
         };
         self.state.display = phoneNumber;

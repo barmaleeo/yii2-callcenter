@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build-dev": "cross-env NODE_ENV=development webpack --color=true && rm -rf ../../../web/assets/*",
+    "build-dev-watch": "cross-env NODE_ENV=development webpack --color=true --watch && rm -rf ../../../web/assets/*",
     "build-prod": "webpack --mode=production && rm -rf ../../../web/assets/*"
   }
-
 }
