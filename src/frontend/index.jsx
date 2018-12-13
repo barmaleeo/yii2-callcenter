@@ -195,6 +195,14 @@ class CallcenterRoot extends Component {
     onClickInfo = (userId) => {
         console.log('clickInfo', userId)
     }
+    selectClient = (id) =>{
+         if(typeof this.props.options == 'object' &&
+             typeof this.props.options.client == "object" &&
+             this.props.options.client.select
+         ) {
+            window[this.props.options.client.select](id)
+         }
+    }
     makeCall(phoneNumber){
         const self = this;
         if(self.state.phoneState != STATE_READY){
@@ -258,6 +266,7 @@ class CallcenterRoot extends Component {
                 <div className="c-o-left">
                     <Outcalls state={s.phoneState}
                               onClickInfo={this.onClickInfo}
+                              onClickClient={this.selectClient}
                               onClickCall={this.onClickCall}/>
                     <Client options={o}/>
                     <Wiki/>

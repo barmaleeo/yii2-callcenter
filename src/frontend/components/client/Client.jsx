@@ -14,7 +14,9 @@ export default class Client extends Component {
             }
             switch (c.type){
                 case 'react':
-                    ReactDOM.render(window[name], this.refs.container);
+                    ReactDOM.render(window[name], this.refs.container),() => {
+
+                    };
                     break;
                 case 'function':
                     window[name](this, this.refs.container);
@@ -25,6 +27,10 @@ export default class Client extends Component {
                     break;
             }
         }
+
+    }
+    clickArea = () => {
+
     }
     render() {
         const p = this.props;

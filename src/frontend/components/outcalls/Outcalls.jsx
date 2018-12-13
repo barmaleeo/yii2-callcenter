@@ -35,6 +35,9 @@ export default class Outcalls extends Component {
             }
         }
     }
+    handleClickSelectClient = (id) => {
+        this.props.onClickClient(id)
+    }
     render() {
         const p = this.props;
         const s = this.state;
@@ -52,7 +55,8 @@ export default class Outcalls extends Component {
                         <td className="o-name">{o.name}</td>
                         <td className="o-phone">{o.phone}</td>
                         <td className="o-desc">
-                            <button className="btn btn-info btn-block btn-xs">
+                            <button className="btn btn-info btn-block btn-xs"
+                                    onClick={p.onClickClient.bind(this, o.user_id)}>
                                 <span className="glyphicon glyphicon-user"></span>
                             </button>
                         </td>
