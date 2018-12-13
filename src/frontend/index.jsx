@@ -204,7 +204,7 @@ class CallcenterRoot extends Component {
             window[this.props.options.client.select](id)
          }
     }
-    makeCall(phoneNumber, call_id){
+    makeCall(phoneNumber, callId){
         const self = this;
         if(self.state.phoneState != STATE_READY){
             return;
@@ -215,7 +215,7 @@ class CallcenterRoot extends Component {
             },
              extraHeaders: [
                  'X-user-domain: ' + this.props.options.sip.url,
-                 'X-call-id: ' + call_id,
+                 'X-callid: ' + callId,
              ]
         };
         self.state.display = phoneNumber;
