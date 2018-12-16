@@ -2,6 +2,7 @@
   font-family: 'LCDMB';
   src: url("/LCDMB.TTF");
 }
+
 #yii2-callcenter-root {
   height: 100%;
 
@@ -31,9 +32,10 @@
       height: 100%;
       width: 350px;
       background: #e4b9b9;
+      border-left: 1px solid #777;
       div.p-o-block-wrapper {
         margin: 0 1px 1px 1px;
-        border: 1px solid #777;
+        border: 1px solid #999;
         padding: 1px;
       }
     }

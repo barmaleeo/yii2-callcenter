@@ -225,11 +225,19 @@ class CallcenterRoot extends Component {
         self.state.session.on('progress', (response) => {
             if(self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
+                try {
+                    self.refs.soundPhoneRingback.play();
+                }catch (e) {
+                    console.log(e)
+                }
                 self.setState(self.state)
             }
         })
         self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
             console.log('Outgoing  call accepted', e, a, this);
+            self.refs.soundPhoneRingback.pause();
+            self.refs.soundPhoneRingback.currentTime = 0;
+
             const pc = self.state.session.sessionDescriptionHandler.peerConnection;
             const remoteStream = new MediaStream();
             pc.getReceivers().forEach(function (receiver) {
@@ -239,13 +247,19 @@ class CallcenterRoot extends Component {
                 }
             });
             self.state.soundPhone.srcObject = remoteStream;
-            self.state.soundPhone.play();
+            try {
+                self.state.soundPhone.play();
+            }catch (e) {
+                console.log(e)
+            }
             self.state.phoneState = STATE_TALKING;
             self.setState(self.state)
 
         })
         self.state.session.on('terminated',(cause) => {
             console.log('outgoing call terminated' + cause);
+            self.refs.soundPhoneRingback.pause();
+            self.refs.soundPhoneRingback.currentTime = 0;
             if(self.state.phoneState == STATE_GO_OFF){
                 self.state.phoneState = STATE_OFF;
             }else{
@@ -262,7 +276,7 @@ class CallcenterRoot extends Component {
         const o = p.options;
         return (
             <div className="cc-outher">
-                <audio ref="soundPhoneWait" src="/sound/phone_wait.mp3" loop />
+                <audio ref="soundPhoneRingback" src="/sound/phone_wait.mp3" loop />
                 <audio ref="soundPhoneRing" src="/sound/phone_ring.mp3" loop />
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
                 <div className="c-o-left">
