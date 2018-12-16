@@ -26,6 +26,7 @@ class Call extends \yii\db\ActiveRecord
 
     const DIRECTION_UNCALL  = 0;
     const DIRECTION_OUTCALL = 1;
+    const DIRECTION_LOCAL   = 2;
 
     public $name;
     public $phone;
@@ -87,5 +88,15 @@ class Call extends \yii\db\ActiveRecord
             ->leftJoin('user_phone','user_phone.id=call.phone_id')
             ->leftJoin('user','user.id=user_phone.user_id')
             ->groupBy('call.id');
+    }
+    
+    public static function finishCall($callUuid){
+        if($call = parent::findOne(['call_id' => $callUuid])){
+
+            $log = new CallLog();
+            $log->call_id = $call->id;
+            
+        }
+
     }
 }
