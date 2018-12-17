@@ -111,6 +111,8 @@ class Call extends \yii\db\ActiveRecord
         
         if(isset($params['phone']) && strlen($params['phone']) == 10 ) {
 
+            $params['phone'] = static::complete($params['phone']);
+
             $clientClass = Yii::$app->params['callcenter']['client']['class'];
             
             $clients = $clientClass::findByPhoneNumber($params['phone']);
@@ -158,4 +160,25 @@ class Call extends \yii\db\ActiveRecord
         }
 
     }
+
+    public static function complete($phone1){
+        $phone = preg_replace('/[^0-9]|i/','',$phone1);
+        if(strlen($phone)==11) {
+            return '3'.$phone;
+        } else if(strlen($phone)==10){
+            return '38'.$phone;
+        } else if(strlen($phone)==9){
+            return '380'.$phone;
+        } else if(strlen($phone)==8){
+            return '3805'.$phone;
+        } else if(strlen($phone)==7){
+            return '38056'.$phone;
+        } else if(strlen($phone)==6){
+            return '380562'.$phone;
+        } else {
+            return $phone;
+        }
+
+    }
+
 }
