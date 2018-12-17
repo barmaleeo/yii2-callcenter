@@ -112,4 +112,29 @@ div.cc-phone-outher{
       width:34px;
     }
   }
+  >div.p-o-block-wrapper.p-o-custom{
+    >fieldset{
+      >legend{
+        font-size: 12px;
+        padding:0;
+        margin:0 5px;
+      }
+      button{
+        padding-left: 0;
+        padding-right: 0;
+      }
+      button.width-1{width:1*100%/12}
+      button.width-2{width:2*100%/12}
+      button.width-3{width:3*100%/12}
+      button.width-4{width:4*100%/12}
+      button.width-5{width:5*100%/12}
+      button.width-6{width:6*100%/12}
+      button.width-7{width:7*100%/12}
+      button.width-8{width:8*100%/12}
+      button.width-9{width:9*100%/12}
+      button.width-10{width:10*100%/12}
+      button.width-11{width:11*100%/12}
+      button.width-12{width:12*100%/12}
+    }
+  }
 }

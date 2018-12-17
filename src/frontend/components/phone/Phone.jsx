@@ -18,6 +18,33 @@ import {
 
 export default class Phone extends Component {
     state = {ajaxNum:0, ajaxError:false};
+    getButtonsBlock = (b, n) => {
+        const blocks = [];
+        for(const prop in b){
+            if(b.hasOwnProperty(prop)){
+                blocks.push({name:prop, items:b[prop]})
+            }
+        }
+        const self = this;
+        function renderItem(item, k){
+            return (
+                <button key={k} className={'btn btn-default'+(item.width?' width-'+item.width:'')}
+                        onClick={self.props.onClickCustom.bind(this, item.event)}>
+                    {item.name}
+                </button>
+            )
+        }
+        return (
+            <div className="p-o-block-wrapper p-o-custom">
+                {blocks.map((block, n) => (
+                    <fieldset key={n}>
+                        <legend>{block.name}</legend>
+                        {block.items.map(renderItem)}
+                    </fieldset>)
+                )}
+            </div>
+        )
+    }
     componentDidMount = () => {
         //перехватываем все запросы ajax от офиса
         let self = this;
@@ -68,6 +95,7 @@ export default class Phone extends Component {
         const p = this.props;
         const s = this.state;
         const ps = p.state;
+        const o = this.props.options;
         
         let logo = '';
         let style;
@@ -153,27 +181,7 @@ export default class Phone extends Component {
                         <span className="glyphicon gluphicon-mic"/>
                     </button>
                 </div>
-                <div className="p-o-block-wrapper p-o-custom">
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '0')}>Прайслист по СМС</button>
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '2002')}>Контакты по СМС</button>
-                </div>
-                <div className="p-o-block-wrapper p-o-custom">
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '0980966206')}>098-096-62-06</button>
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '9694')}>9694</button>
-                </div>
-                <div className="p-o-block-wrapper p-o-custom">
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '2002')}>2002</button>
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '2003')}>2003</button>
-                    <button className="btn btn-default"
-                            onClick={p.onClickCustom.bind(this, '5000')}>5000</button>
-                </div>
-
+                {this.getButtonsBlock(o.buttons)}
             </div>
         )
     }
