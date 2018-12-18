@@ -30,6 +30,7 @@ class CallcenterRoot extends Component {
         session:false,
         phoneState:STATE_OFF,
         callId:0,
+        userId:0,
         display:'',
     }
     componentDidMount(){
@@ -74,7 +75,9 @@ class CallcenterRoot extends Component {
                     console.log(session.request.headers)
                     const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
                     console.log(stats)
-                    
+                    s.userId = stats.id;
+                    s.callId = callId;
+                    self.selectClient(callId);
                 }catch(e){
                     console.log(e);
                 }
@@ -176,6 +179,7 @@ class CallcenterRoot extends Component {
         console.log('clickCancel', this)
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
+            this.state.callId = 0;
             this.state.display = '';
             this.setState(this.state)
         }else if(this.state.session){
