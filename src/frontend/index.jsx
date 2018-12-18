@@ -76,8 +76,8 @@ class CallcenterRoot extends Component {
                     const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
                     console.log(stats)
                     s.userId = stats.id;
-                    s.callId = callId;
-                    self.selectClient(callId);
+                    s.callId = stats.callId;
+                    self.selectClient(stats.callId);
                 }catch(e){
                     console.log(e);
                 }
