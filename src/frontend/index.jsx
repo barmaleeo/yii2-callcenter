@@ -29,6 +29,7 @@ class CallcenterRoot extends Component {
         soundPhone:document.getElementById('sound-phone'),
         session:false,
         phoneState:STATE_OFF,
+        callId:0,
         display:'',
     }
     componentDidMount(){
@@ -102,9 +103,13 @@ class CallcenterRoot extends Component {
             })
             session.on('terminated', (cause) => {
                 console.log('incoming call terminated' + cause);
-                if(self.state.phoneState == STATE_GO_OFF){
+
+                if(self.state.phoneState == STATE_READY) {
+                    // Здесь делаем
+                    return;
+                } else if(self.state.phoneState == STATE_GO_OFF){
                     self.state.phoneState = STATE_OFF;
-                }else{
+                } else {
                     self.state.phoneState = STATE_BUSY;
                 }
                 self.refs.soundPhoneRing.pause();
@@ -218,6 +223,7 @@ class CallcenterRoot extends Component {
                  'X-callid: ' + callId,
              ]
         };
+        self.state.callId = callId;
         self.state.display = phoneNumber;
         self.state.phoneState = STATE_CALLING;
         self.setState(self.state)
@@ -270,6 +276,37 @@ class CallcenterRoot extends Component {
 
         })
     }
+    logCall(event, comment, goal, delivery, data, phoneId = 0){
+
+        if (this.state.cid == 0 //||
+            // (
+            //     this.props.phoneState != P.PHONE_STATUS_RINGING &&
+            //     this.propsphoneState  != P.PHONE_STATUS_TALKING &&
+            //     this.props.phoneState != P.PHONE_STATUS_SWITCH_IN_USE  &&
+            //     this.props.phone.phoneStatus != P.PHONE_STATUS_IN_USE
+            )) {
+            return;
+        }
+        if (goal===undefined) {goal = 0;}
+        if (comment===undefined) {comment = '';}
+        if (delivery===undefined) {delivery = 0;}
+        if (data===undefined) {data = 0;}
+        if (phoneId===undefined) {phoneId = 0;}
+
+        $.get('/callcenter/call-log/',
+            {
+                id:         this.state.callId,
+                event:      event,
+                goal:       goal,
+                comment:    comment,
+                delivery:   delivery,
+                data:       data,
+                phoneId:    phoneId,
+            }).fali((e){
+                console.log('LogCall Error: ', e);
+            })
+    };
+
     render() {
         const p = this.props;
         const s = this.state;
