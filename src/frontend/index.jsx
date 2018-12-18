@@ -69,12 +69,23 @@ class CallcenterRoot extends Component {
             const self = this;
             const s = this.state;
             if(s.phoneState == STATE_READY){
+
+                try{
+                    console.log(session.request.headers)
+                    const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
+                    console.log(stats)
+                    
+                }catch(e){
+                    console.log(e);
+                }
+
                 self.refs.soundPhoneRing.play();
                 s.session = session;
                 s.phoneState = STATE_RINGING;
                 s.display = s.session.remoteIdentity.displayName;
                 self.setState(s);
             }
+
             //session.accept();
 
             session.on('accepted', function (e) {
@@ -276,20 +287,19 @@ class CallcenterRoot extends Component {
 
         })
     }
-    logCall(event, comment, goal, delivery, data, phoneId = 0){
+    logCall(event, comment, goal, data, phoneId = 0){
 
-        if (this.state.cid == 0 //||
+        if (this.state.cid == -10 //||
             // (
             //     this.props.phoneState != P.PHONE_STATUS_RINGING &&
             //     this.propsphoneState  != P.PHONE_STATUS_TALKING &&
             //     this.props.phoneState != P.PHONE_STATUS_SWITCH_IN_USE  &&
-            //     this.props.phone.phoneStatus != P.PHONE_STATUS_IN_USE
-            )) {
+            //     this.props.phone.phoneStatus != P.PHONE_STATUS_IN_USE)
+            ) {
             return;
         }
         if (goal===undefined) {goal = 0;}
         if (comment===undefined) {comment = '';}
-        if (delivery===undefined) {delivery = 0;}
         if (data===undefined) {data = 0;}
         if (phoneId===undefined) {phoneId = 0;}
 
@@ -299,10 +309,9 @@ class CallcenterRoot extends Component {
                 event:      event,
                 goal:       goal,
                 comment:    comment,
-                delivery:   delivery,
                 data:       data,
                 phoneId:    phoneId,
-            }).fali((e){
+            }).fali((e) => {
                 console.log('LogCall Error: ', e);
             })
     };
