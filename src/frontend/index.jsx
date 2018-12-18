@@ -77,7 +77,7 @@ class CallcenterRoot extends Component {
                     console.log(stats)
                     s.userId = stats.id;
                     s.callId = stats.callId;
-                    self.selectClient(stats.callId);
+                    self.selectClient(s.userId);
                 }catch(e){
                     console.log(e);
                 }
