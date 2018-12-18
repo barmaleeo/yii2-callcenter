@@ -19,8 +19,9 @@ class CallcenterBootstrap implements BootstrapInterface
             // do something here
             $app = \Yii::$app;
             $app->getUrlManager()->addRules([
-                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter', 'route' =>  'callcenter/callcenter/index'],
-                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/get-outcalls', 'route' =>  'callcenter/callcenter/get-outcalls'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter',               'route' =>  'callcenter/callcenter/index'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/get-outcalls',  'route' =>  'callcenter/callcenter/get-outcalls'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/call-log',      'route' =>  'callcenter/callcenter/call-log'],
 //                ['class' => 'yii\web\UrlRule', 'pattern' => $this->id . '/<id:\w+>', 'route' => $this->id . '/default/view'],
 //                ['class' => 'yii\web\UrlRule', 'pattern' => $this->id . '/<controller:[\w\-]+>/<action:[\w\-]+>', 'route' => $this->id . '/<controller>/<action>'],
             ], false);

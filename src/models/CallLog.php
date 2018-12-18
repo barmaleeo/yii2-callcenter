@@ -51,6 +51,7 @@ class CallLog extends \yii\db\ActiveRecord
     {
         return [
             [['call_id', 'event_id'], 'integer'],
+            [['data'], 'string', 'max' => 255],
             [['comment'], 'string', 'max' => 255],
         ];
     }
@@ -61,11 +62,12 @@ class CallLog extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('common', 'ID'),
-            'call_id' => Yii::t('common', 'Call ID'),
-            'event_id' => Yii::t('common', 'Event ID'),
-            'comment' => Yii::t('common', 'Comment'),
-            'created' => Yii::t('common', 'Created'),
+            'id'        => Yii::t('common', 'ID'),
+            'call_id'   => Yii::t('common', 'Call ID'),
+            'event_id'  => Yii::t('common', 'Event ID'),
+            'data'      => Yii::t('common', 'Data'),
+            'comment'   => Yii::t('common', 'Comment'),
+            'created'   => Yii::t('common', 'Created'),
         ];
     }
 }

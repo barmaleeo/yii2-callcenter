@@ -9,6 +9,7 @@
 namespace barmaleeo\callcenter\controllers;
 
 use barmaleeo\callcenter\models\Call;
+use barmaleeo\callcenter\models\CallLog;
 use barmaleeo\callcenter\models\CallType;
 
 class CallcenterController extends \yii\base\Controller
@@ -35,5 +36,15 @@ class CallcenterController extends \yii\base\Controller
             'types'     => $types,
         ];
         \Yii::$app->response->data = json_encode($res);
+    }
+
+    public function actionCallLog(){
+        $params = \Yii::$app->request->get();
+
+        $log = new CallLog();
+        $log->load(['CallLog' => $params]);
+        $log->save();
+
+        \Yii::$app->response->data = 'ok';
     }
 }

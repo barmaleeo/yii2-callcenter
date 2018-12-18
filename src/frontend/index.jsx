@@ -69,16 +69,14 @@ class CallcenterRoot extends Component {
         s.ua.on('invite', (session) => {
             const self = this;
             const s = this.state;
-            if(s.phoneState == STATE_READY){
+            if(s.phoneState == STATE_READY) {
 
-                try{
-                    console.log(session.request.headers)
+                try {
                     const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
-                    console.log(stats)
                     s.userId = stats.id;
                     s.callId = stats.callId;
                     self.selectClient(s.userId);
-                }catch(e){
+                } catch (e) {
                     console.log(e);
                 }
 
@@ -87,35 +85,52 @@ class CallcenterRoot extends Component {
                 s.phoneState = STATE_RINGING;
                 s.display = s.session.remoteIdentity.displayName;
                 self.setState(s);
-            }
 
-            //session.accept();
 
-            session.on('accepted', function (e) {
+                //session.accept();
 
-                self.refs.soundPhoneRing.pause();
-                self.refs.soundPhoneRing.currentTime = 0;
+                session.on('accepted', function (e) {
 
-                const pc = session.sessionDescriptionHandler.peerConnection;
-                const remoteStream = new MediaStream();
-                pc.getReceivers().forEach(function(receiver) {
-                    const track = receiver.track;
-                    if (track) {
-                        remoteStream.addTrack(track);
+                    self.refs.soundPhoneRing.pause();
+                    self.refs.soundPhoneRing.currentTime = 0;
+
+                    const pc = session.sessionDescriptionHandler.peerConnection;
+                    const remoteStream = new MediaStream();
+                    pc.getReceivers().forEach(function (receiver) {
+                        const track = receiver.track;
+                        if (track) {
+                            remoteStream.addTrack(track);
+                        }
+                    });
+                    s.soundPhone.srcObject = remoteStream;
+
+                    s.phoneState = STATE_TALKING;
+                    self.setState(s);
+                    console.log('Incoming call accepted', session);
+                    self.logCall(10, 'Начало разговора');
+
+                });
+                session.on('failed', function (e) {
+                    self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
+                })
+                session.on('bye', function (e) {
+                    self.logCall(13, 'Окончание разговора');
+                })
+                session.on('muted', (data) => {
+                    if (data.audio) {
+                        self.logCall(17, 'Сall is Muted');
                     }
                 });
-                s.soundPhone.srcObject = remoteStream;
 
-                s.phoneState = STATE_TALKING;
-                self.setState(s);
-                console.log('Incoming call accepted', session);
-            });
-            session.on('failed', function (e) {
-                
-            })
-            session.on('bye', function (e) {
-            })
+                session.on('unmuted', (data) => {
+                    if (data.audio) {
+                        self.logCall(18, 'Сall is Unmuted');
+                    }
+                });
+            }
             session.on('terminated', (cause) => {
+
+                //if(session)
                 console.log('incoming call terminated' + cause);
 
                 if(self.state.phoneState == STATE_READY) {
@@ -244,6 +259,7 @@ class CallcenterRoot extends Component {
         self.setState(self.state)
         self.state.session = this.state.ua.invite(phoneNumber + '@'+this.props.options.sip.url, options);
         self.state.session.on('progress', (response) => {
+            self.logCall(2, 'Старт вызова');  // старт вызова
             if(self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
                 try {
@@ -275,6 +291,33 @@ class CallcenterRoot extends Component {
             }
             self.state.phoneState = STATE_TALKING;
             self.setState(self.state)
+            self.logCall(10, 'Начало разговора');
+        })
+        self.state.session.on('failed', (e, cause) => {
+            console.log('Outgoing  call failed '+ cause);
+            if(cause==='Busy') {// Номер занят
+                self.logCall(3,"Номер занят", 0, cause);
+            }else if (cause==='No Answer') { // Номер не отвечает
+                self.logCall(4, "Номер не отвечает", 0,  cause)
+            }else { // ошибка соединения
+                self.logCall(1, "Ошибка соединения", 0, cause);
+            }
+
+        })
+        self.state.session.on ('muted', (data) => {
+            if (data.audio) {
+                self.logCall(17, 'Сall is Muted');
+            }
+        });
+
+        self.state.session.on ('unmuted', (data) => {
+            if (data.audio) {
+                self.logCall(18, 'Сall is Unmuted');
+            }
+        });
+
+        self.state.session.on('bye', (e) => {
+            self.logCall(13,'Окончание разговора');
 
         })
         self.state.session.on('terminated',(cause) => {
@@ -291,7 +334,7 @@ class CallcenterRoot extends Component {
 
         })
     }
-    logCall(event, comment, goal, data, phoneId = 0){
+    logCall = (event, comment, goal, data) => {
 
         if (this.state.cid == -10 //||
             // (
@@ -305,17 +348,15 @@ class CallcenterRoot extends Component {
         if (goal===undefined) {goal = 0;}
         if (comment===undefined) {comment = '';}
         if (data===undefined) {data = 0;}
-        if (phoneId===undefined) {phoneId = 0;}
 
-        $.get('/callcenter/call-log/',
+        $.get('callcenter/call-log',
             {
-                id:         this.state.callId,
-                event:      event,
+                call_id:    this.state.callId,
+                event_id:   event,
                 goal:       goal,
                 comment:    comment,
                 data:       data,
-                phoneId:    phoneId,
-            }).fali((e) => {
+            }).fail((e) => {
                 console.log('LogCall Error: ', e);
             })
     };
@@ -344,6 +385,7 @@ class CallcenterRoot extends Component {
                            onClickTransfer={this.onClickTransfer}
                            onClickHold={this.onClickHold}
                            onClickCustom={this.onClickCustom}
+                           logCall={this.logCall}
                            display={s.display}
                            state={s.phoneState}
                            options={o}

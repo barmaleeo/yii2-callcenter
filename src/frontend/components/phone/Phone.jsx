@@ -27,9 +27,16 @@ export default class Phone extends Component {
         }
         const self = this;
         function renderItem(item, k){
+            
+            let handleClick = () => {}
+            if(parseInt(item.event) > 0){
+                handleClick = () => {self.props.logCall(item.event, item.comment, item.goal, item.data)}
+            }
+            
             return (
-                <button key={k} className={'btn btn-default'+(item.width?' width-'+item.width:'')}
-                        onClick={self.props.onClickCustom.bind(this, item.event)}>
+                <button key={k}
+                        className={'btn btn-default'+(item.width?' width-'+item.width:'')}
+                        onClick={handleClick}>
                     {item.name}
                 </button>
             )
