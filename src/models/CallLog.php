@@ -20,12 +20,13 @@ class CallLog extends \yii\db\ActiveRecord
     const CALL_EVENT_CALLING                = 2; // progress
     const CALL_EVENT_BUSY                   = 3; // busy
     const CALL_EVENT_NO_ANSWER              = 4; // no_answer
-    const CALL_EVENT_RINGING                = 8;
-    const CALL_EVENT_PRESS_ACCEPT           = 9;
+    const CALL_EVENT_RINGING                = 7;
+    const CALL_EVENT_SELECT_CLIENT          = 8; // выбран клиент - DEPRECATED
+    const CALL_EVENT_PRESS_ACCEPT           = 9; // 
     const CALL_EVENT_ACCEPTED               = 10;
-    const CALL_EVENT_PRESS_CANCEL           = 12;
     const CALL_EVENT_BYE                    = 13;
-    const CALL_EVENT_CLOSE_CALL             = 15;
+    const CALL_EVENT_PRESS_CANCEL           = 14; //
+    const CALL_EVENT_CLOSE_CALL             = 15; // Закрыт оператором
     const CALL_EVENT_MUTED                  = 17;
     const CALL_EVENT_UNMUTED                = 18;
     const CALL_EVENT_START_VOICEMAIL        = 19;

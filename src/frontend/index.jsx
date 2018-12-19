@@ -197,7 +197,7 @@ class CallcenterRoot extends Component {
     };
     onClickCancel = (e) => {
         console.log('clickCancel', this)
-        self.logCall(12, 'Нажата кнопка Завершить звонок');
+        self.logCall(14, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
             this.state.callId = 0;
