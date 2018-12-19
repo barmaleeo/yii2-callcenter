@@ -76,4 +76,5 @@ class CallLog extends \yii\db\ActiveRecord
             'created'   => Yii::t('common', 'Created'),
         ];
     }
+
 }

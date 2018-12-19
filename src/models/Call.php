@@ -137,6 +137,7 @@ class Call extends \yii\db\ActiveRecord
                 $call->status_id    = static::STATUS_RINGING;
                 $call->phone_id     = $client->phone_id;
                 $call->direction    = static::DIRECTION_INCALL;
+                $call->start_time   = new Expression('NOW()');
                 $call->type_id      = $callType;
                 $call->uuid         = $params['uuid'];
                 $call->save();
