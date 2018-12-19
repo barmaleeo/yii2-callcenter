@@ -113,7 +113,9 @@ class CallcenterRoot extends Component {
 
                 });
                 session.on('failed', function (e, cause) {
-                    self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
+                    if(self.state.answer) {
+                        self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
+                    }
                 })
                 session.on('bye', function (e) {
                     self.logCall(13, 'Окончание разговора');
@@ -136,8 +138,8 @@ class CallcenterRoot extends Component {
                 console.log('incoming call terminated' + cause);
 
                 if(self.state.phoneState == STATE_READY) {
-                    // Здесь делаем
-                    return;
+                    // Здесь делаем сохранение сессии
+
                 } else if(self.state.answer == false){
                     self.state.phoneState = STATE_READY;
                 } else if(self.state.phoneState == STATE_GO_OFF){
