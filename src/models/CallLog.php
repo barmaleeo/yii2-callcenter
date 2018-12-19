@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $call_id
  * @property int $event_id
+ * @property int $oid
  * @property string $comment
  * @property string $created
  */
@@ -54,7 +55,7 @@ class CallLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['call_id', 'event_id'], 'integer'],
+            [['call_id', 'event_id',' oid' ], 'integer'],
             [['data'], 'string', 'max' => 255],
             [['comment'], 'string', 'max' => 255],
         ];

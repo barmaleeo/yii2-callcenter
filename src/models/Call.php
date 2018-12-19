@@ -156,8 +156,9 @@ class Call extends \yii\db\ActiveRecord
         if($call = parent::findOne(['uuid' => $callUuid])){
 
             $log = new CallLog();
-            $log->call_id = $call->id;
-            $log->event_id = CallLog::CALL_EVENT_FINISH;
+            $log->call_id   = $call->id;
+            $log->event_id  = CallLog::CALL_EVENT_FINISH;
+            $log->oid       = 0;
             $res = $log->save(false);
 
             \Yii::warning('FREESwitch inside  '.json_encode($log->toArray()).'  res='.$res);
