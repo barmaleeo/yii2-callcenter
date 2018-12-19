@@ -108,8 +108,10 @@ class Call extends \yii\db\ActiveRecord
             ->groupBy('call.id');
     }
     public static function startIncall($params){
+
+        $strlen = preg_replace('/\D+/', '', $params['phone']);
         
-        if(isset($params['phone']) && strlen($params['phone']) == 10 ) {
+        if(isset($params['phone']) && strlen(preg_replace('/[^0-9]+/', '', $params['phone'])) == 10) {
 
             $params['phone'] = static::complete($params['phone']);
 
