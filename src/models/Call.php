@@ -153,7 +153,7 @@ class Call extends \yii\db\ActiveRecord
     }
     
     public static function finishCall($callUuid){
-        if($call = parent::findOne(['call_id' => $callUuid])){
+        if($call = parent::findOne(['uuid' => $callUuid])){
 
             $log = new CallLog();
             $log->call_id = $call->id;

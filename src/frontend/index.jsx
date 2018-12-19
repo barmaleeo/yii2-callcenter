@@ -59,11 +59,11 @@ class CallcenterRoot extends Component {
             log:{
                 level:'debug',
             },
-            authorizationUser: c.name,
-            password: c.password,
-            hackIpInContact: false,
+            authorizationUser:  c.name,
+            password:           c.password,
+            hackIpInContact:    false,
             hackWssInTransport: false,
-            hackViaTcp: false
+            hackViaTcp:         false
 
         })
         s.ua.on('invite', (session) => {
@@ -74,7 +74,7 @@ class CallcenterRoot extends Component {
                 try {
                     const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
                     s.userId = stats.id;
-                    s.callId = stats.callId;
+                    s.callId = stats.call_id;
                     self.selectClient(s.userId);
                 } catch (e) {
                     console.log(e);
@@ -110,7 +110,7 @@ class CallcenterRoot extends Component {
                     self.logCall(10, 'Начало разговора');
 
                 });
-                session.on('failed', function (e) {
+                session.on('failed', function (e, cause) {
                     self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
                 })
                 session.on('bye', function (e) {
@@ -336,7 +336,7 @@ class CallcenterRoot extends Component {
     }
     logCall = (event, comment, goal, data) => {
 
-        if (this.state.cid == -10 //||
+        if (this.state.callId == -10 //||
             // (
             //     this.props.phoneState != P.PHONE_STATUS_RINGING &&
             //     this.propsphoneState  != P.PHONE_STATUS_TALKING &&
