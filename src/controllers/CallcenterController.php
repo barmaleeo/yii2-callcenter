@@ -14,6 +14,22 @@ use barmaleeo\callcenter\models\CallType;
 
 class CallcenterController extends \yii\base\Controller
 {
+    /**
+    * @param \yii\base\Action $action
+    * @return bool
+    * @throws \yii\db\Exception
+    */
+    public function beforeAction($action)
+    {
+        $id = isset(\Yii::$app->user)?\Yii::$app->user->getId():'0';
+        \Yii::$app->db->createCommand("SET @userid=:userid, @langid=:langid",[
+            'userid'    => $id,
+            'langid'    => \Yii::$app->language,
+        ])->execute();
+
+        return parent::beforeAction($action);
+    }
+
 
     public function actionIndex(){
 
