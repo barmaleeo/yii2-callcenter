@@ -155,8 +155,8 @@ class Call extends \yii\db\ActiveRecord
     public static function finishCall($callUuid){
         if($call = parent::findOne(['uuid' => $callUuid])){
 
-            \Yii::warning('FREESwitch inside  '.json_encode($log->toArray()).
-                '  res='.$res.' userId: '.(isset(\Yii::$app->user)?\Yii::$app->user->getId():'0')
+            \Yii::warning('FREESwitch inside  '.json_encode($callUuid).
+                ' userId: '.(isset(\Yii::$app->user)?\Yii::$app->user->getId():'0')
         );
 
             $log = new CallLog();
