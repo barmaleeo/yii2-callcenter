@@ -29,6 +29,7 @@ class CallcenterRoot extends Component {
         soundPhone:document.getElementById('sound-phone'),
         session:false,
         phoneState:STATE_OFF,
+        answer:false,
         callId:0,
         userId:0,
         display:'',
@@ -79,7 +80,8 @@ class CallcenterRoot extends Component {
                 } catch (e) {
                     console.log(e);
                 }
-
+                
+                self.logCall(8, 'Включен сигнал вызова');
                 self.refs.soundPhoneRing.play();
                 s.session = session;
                 s.phoneState = STATE_RINGING;
@@ -136,11 +138,14 @@ class CallcenterRoot extends Component {
                 if(self.state.phoneState == STATE_READY) {
                     // Здесь делаем
                     return;
+                } else if(self.state.answer == false){
+                    self.state.phoneState = STATE_READY;
                 } else if(self.state.phoneState == STATE_GO_OFF){
                     self.state.phoneState = STATE_OFF;
                 } else {
                     self.state.phoneState = STATE_BUSY;
                 }
+                self.state.answer = false;
                 self.refs.soundPhoneRing.pause();
                 self.refs.soundPhoneRing.currentTime = 0;
                 self.state.session = false;
@@ -192,6 +197,7 @@ class CallcenterRoot extends Component {
     };
     onClickCancel = (e) => {
         console.log('clickCancel', this)
+        self.logCall(12, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
             this.state.callId = 0;
@@ -205,6 +211,8 @@ class CallcenterRoot extends Component {
     };
     onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
+            self.logCall(9, 'Нажата кнопка Взять звонок');
+            this.state.answer = true;
             this.state.session.accept({
                 sessionDescriptionHandlerOptions: {
                     constraints: {audio: true, video: false},
