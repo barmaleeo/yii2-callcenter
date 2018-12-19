@@ -158,7 +158,13 @@ class Call extends \yii\db\ActiveRecord
             $log = new CallLog();
             $log->call_id = $call->id;
             $log->event_id = CallLog::CALL_EVENT_FINISH;
-            $log->save(false);
+            $res = $log->save(false);
+
+            \Yii::warning('FREESwitch inside  '.json_encode($log->toArray()).'  res='.$res);
+
+        }else{
+            \Yii::warning('FREESwitch bypass if  '.$callUuid);
+
         }
 
     }
