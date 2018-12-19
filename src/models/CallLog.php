@@ -55,7 +55,7 @@ class CallLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['call_id', 'event_id',' oid' ], 'integer'],
+            [['call_id', 'event_id','oid' ], 'integer'],
             [['data'], 'string', 'max' => 255],
             [['comment'], 'string', 'max' => 255],
         ];
@@ -69,6 +69,7 @@ class CallLog extends \yii\db\ActiveRecord
         return [
             'id'        => Yii::t('common', 'ID'),
             'call_id'   => Yii::t('common', 'Call ID'),
+            'oid'       => Yii::t('common', 'Operator ID'),
             'event_id'  => Yii::t('common', 'Event ID'),
             'data'      => Yii::t('common', 'Data'),
             'comment'   => Yii::t('common', 'Comment'),
