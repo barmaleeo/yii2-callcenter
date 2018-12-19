@@ -197,7 +197,7 @@ class CallcenterRoot extends Component {
     };
     onClickCancel = (e) => {
         console.log('clickCancel', this)
-        self.logCall(14, 'Нажата кнопка Завершить звонок');
+        this.logCall(14, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
             this.state.phoneState = STATE_READY;
             this.state.callId = 0;
@@ -211,7 +211,7 @@ class CallcenterRoot extends Component {
     };
     onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
-            self.logCall(9, 'Нажата кнопка Взять звонок');
+            this.logCall(9, 'Нажата кнопка Взять звонок');
             this.state.answer = true;
             this.state.session.accept({
                 sessionDescriptionHandlerOptions: {
