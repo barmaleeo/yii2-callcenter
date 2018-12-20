@@ -63,4 +63,26 @@ class CallcenterController extends \yii\base\Controller
 
         \Yii::$app->response->data = 'ok';
     }
+
+
+    public function actionPlayCall()
+    {
+        $id = \Yii::$app->request->get('id', 0);
+        if($id==0){
+            \Yii::$app->response->data  = '';
+            return;
+        }
+
+        $file = Call::getPlayInfo($id);
+
+//        header('Content-length: ' . strlen($file))
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+
+        $headers = \Yii::$app->response->headers;
+        $headers->add('Content-Type', 'audio/mp3');
+        $headers->add('Content-length', strlen($file));
+        \Yii::$app->response->data  = $file;
+    }
+
 }

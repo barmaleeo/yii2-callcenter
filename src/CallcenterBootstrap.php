@@ -22,6 +22,7 @@ class CallcenterBootstrap implements BootstrapInterface
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter',               'route' =>  'callcenter/callcenter/index'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/get-outcalls',  'route' =>  'callcenter/callcenter/get-outcalls'],
                 ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/call-log',      'route' =>  'callcenter/callcenter/call-log'],
+                ['class' => 'yii\web\UrlRule', 'pattern' => 'callcenter/play-call',      'route' =>  'callcenter/callcenter/play-call'],
 //                ['class' => 'yii\web\UrlRule', 'pattern' => $this->id . '/<id:\w+>', 'route' => $this->id . '/default/view'],
 //                ['class' => 'yii\web\UrlRule', 'pattern' => $this->id . '/<controller:[\w\-]+>/<action:[\w\-]+>', 'route' => $this->id . '/<controller>/<action>'],
             ], false);

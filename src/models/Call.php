@@ -104,6 +104,7 @@ class Call extends \yii\db\ActiveRecord
                 'user.name',
                 'call.created',
                 'call.enable_time',
+                'call.start_time',
             ])
             ->leftJoin('user_phone','user_phone.id=call.phone_id')
             ->leftJoin('user','user.id=user_phone.user_id')
@@ -190,5 +191,34 @@ class Call extends \yii\db\ActiveRecord
         }
 
     }
+
+    public function getPath($ext = 'mp3'){
+        if ($this['direction'] == 1) {
+            $date = strtotime($this->start_time);
+            //$path = date("Y-m-d/", $date);
+            $path = date("Ym/", $date);
+        } else {
+            $date = strtotime($this->start_time);
+            //$path = date("Y-m-d/", $date);
+            $path = date("Ym/", $date);
+        }
+        return \Yii::$app->basePath."/recordings/".$path."*" . $this->uuid . "*.".$ext;
+
+    }
+
+    public static function getPlayInfo($id){
+
+        $call = parent::find()->where(['id' => $id])->one();
+
+        $files = glob($call->getPath());
+
+        if (count($files) > 0) {
+            return file_get_contents($files[0], true);
+        } else {
+            return 'not found';
+        }
+
+    }
+
 
 }
