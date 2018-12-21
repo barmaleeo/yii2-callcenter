@@ -208,14 +208,20 @@ class Call extends \yii\db\ActiveRecord
 
     public static function getPlayInfo($id, $ext = 'mp3'){
 
-        $call = parent::find()->where(['id' => $id])->one();
-        $path = $call->getPath();
+        if(!$call = parent::find()->where(['id' => $id])->one()){
+            throw new \yii\web\HttpException(404);
+        }
+        $path = $call->getPath($ext);
 
+        \Yii::warning('PlayInfo', $path);
+        
         $files = glob($path . "*" . $call->uuid . "*.".$ext);
 
 
         if (count($files) > 0) {
-            static::smartReadFile($files[0], 'audio/mp3');
+            \Yii::warning('PlayInfo', $files[0]);
+
+            static::smartReadFile($files[0], 'audio/'.$ext);
         } else {
             throw new \yii\web\HttpException(404);
         }
