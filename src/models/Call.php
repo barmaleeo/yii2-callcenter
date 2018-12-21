@@ -172,6 +172,18 @@ class Call extends \yii\db\ActiveRecord
         }
     }
 
+    public static function answerCall($callUuid){
+
+        if($call = parent::findOne(['uuid' => $callUuid])){
+
+            $log = new CallLog();
+            $log->call_id   = $call->id;
+            $log->event_id  = CallLog::CALL_EVENT_ANSWER;
+            $res = $log->save(false);
+
+        }
+    }
+
     public static function complete($phone1){
         $phone = preg_replace('/[^0-9]|i/','',$phone1);
         if(strlen($phone)==11) {

@@ -21,6 +21,7 @@ class CallLog extends \yii\db\ActiveRecord
     const CALL_EVENT_CALLING                = 2; // progress
     const CALL_EVENT_BUSY                   = 3; // busy
     const CALL_EVENT_NO_ANSWER              = 4; // no_answer
+    const CALL_EVENT_ANSWER                 = 6;
     const CALL_EVENT_RINGING                = 7;
     const CALL_EVENT_SELECT_CLIENT          = 8; // выбран клиент - DEPRECATED
     const CALL_EVENT_PRESS_ACCEPT           = 9; // 
