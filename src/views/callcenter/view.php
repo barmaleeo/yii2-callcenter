@@ -15,6 +15,12 @@ if(isset(Yii::$app->params['callcenter'])){
 if(isset($params['sip']['source'])){
     $params['sip'] = array_merge($params['sip'], $params['sip']['source']());
 }
+$operator =  \Yii::$app->getUser()->getIdentity();
+
+$params['operator'] = [
+    'id'        => $operator['id'],
+    'operator'  => $operator['name']
+];
 
 \barmaleeo\callcenter\CallcenterAsset::register($this);
 

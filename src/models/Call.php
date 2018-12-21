@@ -157,7 +157,20 @@ class Call extends \yii\db\ActiveRecord
     }
     
     public static function startOutcall($params){
-        
+        if($call = parent::findOne($params['callid'])){
+
+            $call->uuid     = $params['uuid'];
+            $call->status   = Call::STATUS_CALLING;
+            $call->save(false);
+
+            $log = new CallLog();
+            $log->call_id   = $call->id;
+            $log->op_id     = $params['userid'];
+            $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
+            $res = $log->save(false);
+
+        }
+
     }
     
     public static function finishCall($callUuid){

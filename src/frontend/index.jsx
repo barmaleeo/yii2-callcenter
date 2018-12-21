@@ -261,6 +261,7 @@ class CallcenterRoot extends Component {
              extraHeaders: [
                  'X-user-domain: ' + this.props.options.sip.url,
                  'X-callid: ' + callId,
+                 'X-userid: ' + self.options.operator.id,
              ]
         };
         self.state.callId = callId;

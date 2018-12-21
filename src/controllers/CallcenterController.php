@@ -32,7 +32,6 @@ class CallcenterController extends \yii\base\Controller
 
 
     public function actionIndex(){
-
         return $this->render("view",[]);
     }
 
@@ -72,18 +71,8 @@ class CallcenterController extends \yii\base\Controller
             throw new \yii\web\HttpException(404);
         }
         
-
-
         Call::getPlayInfo($id);
 
-//        header('Content-length: ' . strlen($file))
-
-//        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-//
-//        $headers = \Yii::$app->response->headers;
-//        $headers->add('Content-Type', 'audio/mp3');
-//        $headers->add('Content-length', strlen($file));
-//        \Yii::$app->response->data  = $file;
     }
 
 }
