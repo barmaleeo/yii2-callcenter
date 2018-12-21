@@ -213,14 +213,9 @@ class Call extends \yii\db\ActiveRecord
         }
         $path = $call->getPath($ext);
 
-        \Yii::warning('PlayInfo', $path);
-        
         $files = glob($path . "*" . $call->uuid . "*.".$ext);
 
-
         if (count($files) > 0) {
-            \Yii::warning('PlayInfo', $files[0]);
-
             static::smartReadFile($files[0], 'audio/'.$ext);
         } else {
             throw new \yii\web\HttpException(404);
