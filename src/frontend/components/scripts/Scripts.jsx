@@ -5,7 +5,9 @@ export default class Scripts extends Component {
         const p = this.props;
         const s = this.state;
         return (
-            <div>Hello from Scripts!</div>
+            <div className="call-script-container">
+                <div className="cs-body" dangerouslySetInnerHTML={{__html:p.script}}/>
+            </div>
         )
     }
 }

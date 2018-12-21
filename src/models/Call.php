@@ -202,23 +202,94 @@ class Call extends \yii\db\ActiveRecord
             //$path = date("Y-m-d/", $date);
             $path = date("Ym/", $date);
         }
-        return \Yii::$app->basePath."/recordings/".$path."*" . $this->uuid . "*.".$ext;
+        return \Yii::$app->basePath."/recordings/".$path;//."*" . $this->uuid . "*.".$ext;
 
     }
 
-    public static function getPlayInfo($id){
+    public static function getPlayInfo($id, $ext = 'mp3'){
 
         $call = parent::find()->where(['id' => $id])->one();
+        $path = $call->getPath();
 
-        $files = glob($call->getPath());
+        $files = glob($path . "*" . $call->uuid . "*.".$ext);
+
 
         if (count($files) > 0) {
-            return file_get_contents($files[0], true);
+            static::smartReadFile($files[0], 'audio/mp3');
         } else {
-            return 'not found';
+            throw new \yii\web\HttpException(404);
+        }
+    }
+
+    public static function smartReadFile($location, $mimeType = 'application/octet-stream')
+    {
+        $headers = \Yii::$app->response->headers;
+
+        if (!file_exists($location))
+        {
+            throw new \yii\web\HttpException(404);
         }
 
+        $size	= filesize($location);
+        $time	= date('r', filemtime($location));
+
+        $fm		= @fopen($location, 'rb');
+        if (!$fm)
+        {
+            throw new \yii\web\HttpException(505);
+        }
+
+        $begin	= 0;
+        $end	= $size - 1;
+
+        if (isset($_SERVER['HTTP_RANGE']))
+        {
+            if (preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $_SERVER['HTTP_RANGE'], $matches))
+            {
+                $begin	= intval($matches[1]);
+                if (!empty($matches[2]))
+                {
+                    $end	= intval($matches[2]);
+                }
+            }
+        }
+        if (isset($_SERVER['HTTP_RANGE']))
+        {
+            Yii::$app->response->statusCode = 206;
+        }
+        else
+        {
+            Yii::$app->response->statusCode = 200;
+        }
+
+        $headers->add('Content-Type', $mimeType);
+        $headers->add('Cache-Control', 'public, must-revalidate, max-age=0');
+        $headers->add('Pragma', 'no-cache');
+        $headers->add('Accept-Ranges', 'bytes');
+        $headers->add('Content-Length', ($end - $begin) + 1);
+
+        if (isset($_SERVER['HTTP_RANGE']))
+        {
+            $headers->add('Content-Range', "bytes $begin-$end/$size");
+        }
+        $headers->add('Content-Disposition', 'inline; filename='.pathinfo($location)['filename']);
+        $headers->add('Content-Transfer-Encoding', 'binary');
+        $headers->add('Last-Modified', $time);
+
+        $cur	= $begin;
+        fseek($fm, $begin, 0);
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+
+        \Yii::$app->response->data = '';
+
+        while(!feof($fm) && $cur <= $end /*&& (connection_status() == 0)*/)
+        {
+            \Yii::$app->response->data .= fread($fm, min(1024 * 16, ($end - $cur) + 1));
+            $cur += 1024 * 16;
+        }
     }
+
 
 
 }
