@@ -63,6 +63,11 @@ class CallcenterController extends \yii\base\Controller
         \Yii::$app->response->data = 'ok';
     }
 
+    public function actionMakeCall(){
+        $params = \Yii::$app
+        $a = 5;
+    }
+
 
     public function actionPlayCall()
     {

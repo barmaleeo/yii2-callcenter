@@ -157,7 +157,7 @@ class Call extends \yii\db\ActiveRecord
     }
     
     public static function startOutcall($params){
-        if($call = parent::findOne($params['callid'])){
+        if($call = parent::findOne(['call.id' => $params['callid'], 'call.status' => Call::STATUS_READY])){
 
             $call->uuid     = $params['uuid'];
             $call->status   = Call::STATUS_CALLING;

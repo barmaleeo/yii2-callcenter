@@ -237,11 +237,17 @@ class CallcenterRoot extends Component {
 
     }
     onClickCustom = (phone) => {
-        this.makeCall(phone)
+//        this.makeCall(phone)
     }
     onClickCall = (phone, uid, callId) => {
-        this.selectClient(uid)
-        this.makeCall(phone, callId);
+        const self = this;
+        $.get('callcenter/make-call', {id:callId}, (r) => {
+            self.selectClient(uid)
+            self.makeCall(phone, callId);
+
+        }).fail((e) => {
+            console.log('callcenter/make-call', e)
+        })
     }
     onClickInfo = (userId) => {
         console.log('clickInfo', userId)
