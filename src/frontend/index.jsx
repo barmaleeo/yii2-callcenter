@@ -6,6 +6,7 @@ import Client   from './components/client/Client.jsx'
 import Wiki     from './components/wiki/Wiki.jsx'
 import Phone    from './components/phone/Phone.jsx'
 import SIP      from 'sip.js'
+import Modal    from './components/modal/Modal'
 
 import {
     STATE_OFF,
@@ -33,6 +34,7 @@ class CallcenterRoot extends Component {
         callId:0,
         userId:0,
         display:'',
+        modal:[{}],
     }
     componentDidMount(){
         const self = this;
@@ -40,6 +42,9 @@ class CallcenterRoot extends Component {
         const s = this.state;
         const o = p.options;
         const c = o.sip;
+
+        window.callcenterModalOpen = this.pushModal.bind(this);
+        window.callcenterModalClose = this.fadeModal.bind(this);
 
         const options = {
             sessionDescriptionHandlerOptions: {
@@ -246,7 +251,9 @@ class CallcenterRoot extends Component {
              typeof this.props.options.client == "object" &&
              this.props.options.client.select
          ) {
-            window[this.props.options.client.select](id)
+            const ccc = window[this.props.options.client.select](id)
+             console.log(ccc)
+             this.state.userId = id;
          }
     }
     makeCall(phoneNumber, callId){
@@ -371,13 +378,28 @@ class CallcenterRoot extends Component {
                 console.log('LogCall Error: ', e);
             })
     };
-
+    closeModal = () => {
+        if(this.state.modal.length>0){
+            this.state.modal.pop()
+            this.setState(this.state);
+        }
+    }
+    pushModal(data){
+        this.state.modal.push(data)
+        this.setState(this.state)
+    }
+    fadeModal(){
+        if(this.refs.modal){
+            this.refs.modal.handleCloseModal();
+        }
+    }
     render() {
         const p = this.props;
         const s = this.state;
         const o = p.options;
         return (
             <div className="cc-outher">
+                {s.modal.length>0 && <Modal ref="modal" data={s.modal[s.modal.length-1]} onClose={this.closeModal}/>}
                 <audio ref="soundPhoneRingback" src="/sound/phone_wait.mp3" loop />
                 <audio ref="soundPhoneRing" src="/sound/phone_ring.mp3" loop />
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
@@ -400,6 +422,7 @@ class CallcenterRoot extends Component {
                            display={s.display}
                            state={s.phoneState}
                            options={o}
+                           parent={this}
                            register={s.ua && s.ua.isRegistered()}/>
                 </div>
             </div>

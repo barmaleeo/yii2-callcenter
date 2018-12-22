@@ -29,7 +29,9 @@ export default class Phone extends Component {
         function renderItem(item, k){
             
             let handleClick = () => {}
-            if(parseInt(item.event) > 0){
+            if(typeof item.action == 'string'){
+                handleClick = () => {window[item.action](self.props.parent)}
+            }else if(parseInt(item.event) > 0){
                 handleClick = () => {self.props.logCall(item.event, item.comment, item.goal, item.data)}
             }
             
