@@ -55,7 +55,7 @@ export default class Modal extends Component {
                     <div className="modal-content"
                          onClick={this.handleClickContent}>
                         <div className="modal-header">
-                            <p>{header}</p>
+                            <h4>{header}</h4>
                         </div>
                         <div className="modal-body">{bodyContent}</div>
                         <div className="modal-footer">
