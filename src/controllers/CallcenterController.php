@@ -65,7 +65,7 @@ class CallcenterController extends \yii\base\Controller
 
     public function actionMakeCall(){
         $id = \Yii::$app->request->get('id', 0);
-        $a = 5;
+        \Yii::$app->response->data = json_encode(Call::makeOutcall($id));
     }
 
 

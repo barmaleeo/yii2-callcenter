@@ -164,7 +164,7 @@ class Call extends \yii\db\ActiveRecord
 
             $log = new CallLog();
             $log->call_id   = $call->id;
-            $log->oid       = $params['userid'];
+            $log->oid       = \Yii::$app->getUser()->getId();
             $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
             $res = $log->save(false);
         }
