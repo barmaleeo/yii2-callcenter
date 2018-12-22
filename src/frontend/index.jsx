@@ -34,7 +34,7 @@ class CallcenterRoot extends Component {
         callId:0,
         userId:0,
         display:'',
-        modal:[{}],
+        modal:[],
     }
     componentDidMount(){
         const self = this;
