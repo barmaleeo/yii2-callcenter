@@ -64,7 +64,7 @@ class CallcenterController extends \yii\base\Controller
     }
 
     public function actionMakeCall(){
-        $params = \Yii::$app
+        $id = \Yii::$app->request->get('id', 0);
         $a = 5;
     }
 

@@ -30,7 +30,7 @@ class Call extends \yii\db\ActiveRecord
     const STATUS_RINGING            = 64;  //  status = 64 - входящий звонок
     const STATUS_CALLING            = 72;  //  status = 72 - старт вызова
     const STATUS_RECORD_MSG         = 73;  //  status = 73 - запись на автоответчик
-    const STATUS_TALKING            = 96;  //  status = 96 - взята оператором
+    const STATUS_TAKEN              = 96;  //  status = 96 - Начало разговора
     const STATUS_CONN_ERROR         = 97;  //  status = 97  - ошибка соединения
     const STATUS_CLOSED_SYS         = 98;  //  status = 98  - снят системой
     const STATUS_NO_MEDIA           = 121; //  status = 121 - ошибка соединения - нажата кнопка "Не слышу абонента"
@@ -155,17 +155,31 @@ class Call extends \yii\db\ActiveRecord
         }
 
     }
-    
-    public static function startOutcall($params){
-        if($call = parent::findOne(['call.id' => $params['callid'], 'call.status' => Call::STATUS_READY])){
 
-            $call->uuid     = $params['uuid'];
-            $call->status   = Call::STATUS_CALLING;
+    public static function makeOutcall($id){
+        if($call = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY])) {
+            $call->status_id = Call::STATUS_CALLING;
+            $call->op_id = Yii::$app->getUser()->getId();
             $call->save(false);
 
             $log = new CallLog();
             $log->call_id   = $call->id;
-            $log->op_id     = $params['userid'];
+            $log->oid       = $params['userid'];
+            $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
+            $res = $log->save(false);
+        }
+    }
+    
+    public static function startOutcall($params){
+        if($call = parent::findOne(['call.id' => $params['callid'], 'call.status_id' => Call::STATUS_TAKEN])){
+
+            $call->uuid      = $params['uuid'];
+            $call->status_id = Call::STATUS_CALLING;
+            $call->save(false);
+
+            $log = new CallLog();
+            $log->call_id   = $call->id;
+            $log->oid     = $params['userid'];
             $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
             $res = $log->save(false);
 
