@@ -158,7 +158,7 @@ class Call extends \yii\db\ActiveRecord
 
     public static function makeOutcall($id){
         if($call = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY])) {
-            $call->status_id = Call::STATUS_CALLING;
+            $call->status_id = Call::STATUS_TAKEN;
             $call->op_id = Yii::$app->getUser()->getId();
             $call->save(false);
 
