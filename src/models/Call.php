@@ -180,7 +180,7 @@ class Call extends \yii\db\ActiveRecord
             $log = new CallLog();
             $log->call_id   = $call->id;
             $log->oid     = $params['userid'];
-            $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
+            $log->event_id  = CallLog::CALL_EVENT_CALLING;
             $res = $log->save(false);
 
         }
