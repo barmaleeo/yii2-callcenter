@@ -171,6 +171,11 @@ class Call extends \yii\db\ActiveRecord
     }
     
     public static function startOutcall($params){
+
+        $calll = parent::find()->where(['call.id' => $params['callid']])->asArray()->all();
+
+        Yii::warning(print_r($calll));
+
         if($call = parent::findOne(['call.id' => $params['callid'], 'call.status_id' => Call::STATUS_TAKEN])){
 
             $call->uuid      = $params['uuid'];
