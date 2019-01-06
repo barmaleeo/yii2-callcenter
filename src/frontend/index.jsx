@@ -2,6 +2,7 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import Outcalls from './components/outcalls/Outcalls.jsx'
+import Scripts  from './components/scripts/Scriptss.jsx'
 import Client   from './components/client/Client.jsx'
 import Wiki     from './components/wiki/Wiki.jsx'
 import Phone    from './components/phone/Phone.jsx'
@@ -403,6 +404,10 @@ class CallcenterRoot extends Component {
         const p = this.props;
         const s = this.state;
         const o = p.options;
+        const showScript = s.phoneState== STATE_CALLING ||
+            s.phoneState== STATE_PROGRESS ||
+            s.phoneState== STATE_TALKING ||
+            s.phoneState== STATE_BUSY || ;
         return (
             <div className="cc-outher">
                 {s.modal.length>0 && <Modal ref="modal" data={s.modal[s.modal.length-1]} onClose={this.closeModal}/>}
@@ -410,11 +415,14 @@ class CallcenterRoot extends Component {
                 <audio ref="soundPhoneRing" src="/sound/phone_ring.mp3" loop />
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
                 <div className="c-o-left">
-                    <Outcalls state={s.phoneState}
-                              onClickInfo={this.onClickInfo}
-                              onClickClient={this.selectClient}
-                              onClickCall={this.onClickCall}/>
-                    <Client options={o}/>
+                    {showScript ?
+                        <Outcalls state={s.phoneState}
+                                  onClickInfo={this.onClickInfo}
+                                  onClickClient={this.selectClient}
+                                  onClickCall={this.onClickCall}/>:
+                        <Scripts/>
+                    }
+                    <Client options = {o}/>:
                     <Wiki/>
                 </div>
                 <div className="c-o-right">
