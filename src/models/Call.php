@@ -4,6 +4,7 @@ namespace barmaleeo\callcenter\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -157,6 +158,12 @@ class Call extends \yii\db\ActiveRecord
     }
 
     public static function makeOutcall($id){
+
+
+        $callll = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY]);
+
+        Yii::warning('makeOutcall'.json_encode(ArrayHelper::toArray($callll)));
+
         if($call = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY])) {
             $call->status_id = Call::STATUS_TAKEN;
             $call->op_id = Yii::$app->getUser()->getId();
@@ -167,6 +174,9 @@ class Call extends \yii\db\ActiveRecord
             $log->oid       = \Yii::$app->getUser()->getId();
             $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
             $res = $log->save(false);
+
+            Yii::warning('makeOutcallInside'.json_encode(ArrayHelper::toArray($call)));
+
         }
     }
     
@@ -174,7 +184,7 @@ class Call extends \yii\db\ActiveRecord
 
         $calll = parent::find()->where(['call.id' => $params['callid']])->asArray()->all();
 
-        Yii::warning(print_r($calll));
+        Yii::warning('startOutcall'.json_encode(ArrayHelper::toArray($calll)));
 
         if($call = parent::findOne(['call.id' => $params['callid'], 'call.status_id' => Call::STATUS_TAKEN])){
 
