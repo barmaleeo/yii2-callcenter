@@ -285,8 +285,8 @@ class CallcenterRoot extends Component {
         self.state.session = this.state.ua.invite(phoneNumber + '@'+this.props.options.sip.url, options);
         self.state.session.on('progress', (response) => {
 
-            self.logCall(2, 'Старт вызова, code:'+ response.status_code);  // старт вызова
-            if(self.state.phoneState == STATE_CALLING){
+            //self.logCall(2, 'Старт вызова, code:'+ response.status_code);  // старт вызова
+            if(response.status_code == 183 && self.state.phoneState == STATE_CALLING){
                 self.state.phoneState = STATE_PROGRESS;
                 try {
                     self.refs.soundPhoneRingback.play();
