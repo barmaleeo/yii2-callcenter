@@ -2,7 +2,7 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import Outcalls from './components/outcalls/Outcalls.jsx'
-import Scripts  from './components/scripts/Scriptss.jsx'
+import Scripts  from './components/scripts/Scripts.jsx'
 import Client   from './components/client/Client.jsx'
 import Wiki     from './components/wiki/Wiki.jsx'
 import Phone    from './components/phone/Phone.jsx'
