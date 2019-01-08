@@ -27,6 +27,7 @@ class CallLog extends \yii\db\ActiveRecord
     const CALL_EVENT_SELECT_CLIENT          = 8; // выбран клиент - DEPRECATED
     const CALL_EVENT_PRESS_ACCEPT           = 9; // 
     const CALL_EVENT_ACCEPTED               = 10;
+    const CALL_EVENT_PRESS_NO_ANSWER        = 11; // нажата кнопка Абонент не отвечает
     const CALL_EVENT_BYE                    = 13;
     const CALL_EVENT_PRESS_CANCEL           = 14; //
     const CALL_EVENT_CLOSE_CALL             = 15; // Закрыт оператором
