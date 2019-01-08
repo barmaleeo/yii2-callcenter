@@ -407,7 +407,7 @@ class CallcenterRoot extends Component {
         const showScript = s.phoneState== STATE_CALLING ||
             s.phoneState== STATE_PROGRESS ||
             s.phoneState== STATE_TALKING ||
-            s.phoneState== STATE_BUSY || ;
+            s.phoneState== STATE_BUSY;
         return (
             <div className="cc-outher">
                 {s.modal.length>0 && <Modal ref="modal" data={s.modal[s.modal.length-1]} onClose={this.closeModal}/>}
