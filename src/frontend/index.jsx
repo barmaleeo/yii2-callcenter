@@ -416,11 +416,11 @@ class CallcenterRoot extends Component {
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
                 <div className="c-o-left">
                     {showScript ?
+                        <Scripts script={'<h1>Здесь будет скрипт звонка</h1>'}/>:
                         <Outcalls state={s.phoneState}
                                   onClickInfo={this.onClickInfo}
                                   onClickClient={this.selectClient}
-                                  onClickCall={this.onClickCall}/>:
-                        <Scripts/>
+                                  onClickCall={this.onClickCall}/>
                     }
                     <Client options = {o}/>:
                     <Wiki/>
