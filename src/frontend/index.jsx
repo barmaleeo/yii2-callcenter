@@ -409,14 +409,15 @@ class CallcenterRoot extends Component {
         const p = this.props;
         const s = this.state;
         const o = p.options;
+        const u = p.user;
         const url = o.websockets.host;
 
         if(s.wsOk){
             const payload = JSON.stringify({
                 mode:       "callcenter",
                 type:       'ping',
-                hash:       o.websockets.hash,
-                user_id:    o.websockets.uid
+                hash:       u.hash,
+                user_id:    u.id
             });
             s.ws.send(payload);
 
@@ -438,8 +439,8 @@ class CallcenterRoot extends Component {
                 const auth = {
                     type:'listener',
                     mode:'callcenter',
-                    hash:o.websockets.hash,
-                    user_id: o.websockets.uid
+                    hash:u.hash,
+                    user_id: u.id
                 };
                 s.ws.send(JSON.stringify(auth));
                 s.wsOk = true;
@@ -505,6 +506,7 @@ class CallcenterRoot extends Component {
                            logCall={this.logCall}
                            display={s.display}
                            state={s.phoneState}
+                           wsState={s.wsOk}
                            options={o}
                            parent={this}
                            register={s.ua && s.ua.isRegistered()}/>
@@ -517,5 +519,6 @@ class CallcenterRoot extends Component {
 const root = document.getElementById('yii2-callcenter-root')
 
 const options = JSON.parse(root.dataset.options)
+const user = JSON.parse(root.dataset.user)
 
-ReactDOM.render(<CallcenterRoot options={options}/>, root)
+ReactDOM.render(<CallcenterRoot options={options} user={user}/>, root)

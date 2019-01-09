@@ -156,7 +156,7 @@ export default class Phone extends Component {
                 </div>
                 <div className="p-o-block-wrapper p-o-number">
                     <div className="o-n-lights">
-                        <div className="n-lighs-ws"></div>
+                        <div className={'n-lighs-ws'+(p.wsState?' green':'')}></div>
                         <div className={'n-lighs-sip'+(p.register?' green':'')}></div>
                         <div className="n-lighs-query" title={ajaxTitle} style={{background:ajaxBg}}/>
                     </div>

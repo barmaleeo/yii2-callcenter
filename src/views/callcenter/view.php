@@ -21,6 +21,11 @@ $params['operator'] = [
     'id'        => $operator['id'],
     'operator'  => $operator['name']
 ];
+$identity = Yii::$app->user->getIdentity();
+$user = [
+        'id' =>  $identity['id'],
+        'hash' => $identity['ws_hash'],
+];
 
 \barmaleeo\callcenter\CallcenterAsset::register($this);
 
@@ -28,6 +33,7 @@ $params['operator'] = [
 ?>
 <audio id="sound-phone" autoPlay="autoplay"></audio>
 <div id="yii2-callcenter-root"
-     data-options='<?=json_encode($params)?>'>
+     data-options='<?=json_encode($params)?>'
+     data-user='<?=json_encode($user)?>'>
     Loading...
 </div>
