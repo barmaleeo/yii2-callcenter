@@ -11,6 +11,12 @@ import './outcallsStyle.scss'
 
 export default class Outcalls extends Component {
     state = {outcalls:[], types:[], loading:true, error:false}
+    addOutcall(outcall){
+        console.log('addOutcall', outcall)
+    }
+    removeOutcall(outcall){
+        console.log('removeOutcall', outcall)
+    }
     componentDidMount(){
         const self = this;
         const s = this.state;

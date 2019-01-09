@@ -44,6 +44,9 @@ class CallcenterRoot extends Component {
         const o = p.options;
         const c = o.sip;
 
+        this.serveWebsockets();
+        setInterval(this.serveWebsockets.bind(this), 5000);
+
         window.callcenterModalOpen = this.pushModal.bind(this);
         window.callcenterModalClose = this.fadeModal.bind(this);
 
@@ -401,6 +404,72 @@ class CallcenterRoot extends Component {
             this.refs.modal.handleCloseModal();
         }
     }
+    serveWebsockets(){
+        const self = this;
+        const p = this.props;
+        const s = this.state;
+        const o = p.options;
+        const url = o.websockets.host;
+
+        if(s.wsOk){
+            const payload = JSON.stringify({
+                mode:       "callcenter",
+                type:       'ping',
+                hash:       o.websockets.hash,
+                user_id:    o.websockets.uid
+            });
+            s.ws.send(payload);
+
+        }else if(url  && s.ws==null) {
+            s.ws = new WebSocket(url);
+
+            s.ws.onerror = (e) => {
+                console.log('serveWebsockets', s.ws, e);
+                s.wsOk = false;
+                s.ws = null;
+                self.setState(s);
+            };
+            s.ws.onclose = (e) =>{
+                s.wsOk = false;
+                s.ws = null;
+                self.setState(s);
+            };
+            s.ws.onopen = (e) => {
+                const auth = {
+                    type:'listener',
+                    mode:'callcenter',
+                    hash:o.websockets.hash,
+                    user_id: o.websockets.uid
+                };
+                s.ws.send(JSON.stringify(auth));
+                s.wsOk = true;
+                self.setState(s);
+            };
+            s.ws.onmessage = (e) => {
+                if (e.data!=='DONE') {
+                    console.log('ws.onmessage',e);
+                    const message = JSON.parse(e.data);
+                    switch (message.type) {
+                        case 'add_outcall':
+                            if(message.data!== null) {
+                                //p.phoneActions.addOutcalls(message.data);
+                            }else{
+                                console.log(e);
+                            }
+                            break;
+                        case 'remove_outcall':
+                            p.phoneActions.removeOutcall(message.data);
+                            break;
+                        case 'token':
+                            s.wsToken = message.msg;
+                            console.log('token: '+message.msg);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
     render() {
         const p = this.props;
         const s = this.state;
@@ -423,7 +492,7 @@ class CallcenterRoot extends Component {
                                   onClickClient={this.selectClient}
                                   onClickCall={this.onClickCall}/>
                     }
-                    <Client options = {o}/>:
+                    <Client options = {o}/>
                     <Wiki/>
                 </div>
                 <div className="c-o-right">
