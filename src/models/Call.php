@@ -159,11 +159,6 @@ class Call extends \yii\db\ActiveRecord
 
     public static function makeOutcall($id){
 
-
-        $callll = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY]);
-
-        Yii::warning('makeOutcall'.json_encode(ArrayHelper::toArray($callll)));
-
         if($call = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY])) {
             $call->status_id = Call::STATUS_TAKEN;
             $call->op_id = Yii::$app->getUser()->getId();
@@ -175,8 +170,7 @@ class Call extends \yii\db\ActiveRecord
             $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
             $res = $log->save(false);
 
-            Yii::warning('makeOutcallInside'.json_encode(ArrayHelper::toArray($call)));
-
+            Yii::$app->websockets->sendMessage( "callcenter", $call->id, 0, 'remove_outcall');
         }
     }
     

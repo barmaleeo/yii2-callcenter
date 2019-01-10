@@ -410,7 +410,7 @@ class CallcenterRoot extends Component {
         const s = this.state;
         const o = p.options;
         const u = p.user;
-        const url = o.websockets.host;
+        const url = p.websockets.host;
 
         if(s.wsOk){
             const payload = JSON.stringify({
@@ -459,7 +459,7 @@ class CallcenterRoot extends Component {
                             }
                             break;
                         case 'remove_outcall':
-                            p.phoneActions.removeOutcall(message.data);
+                            self.refs.outcalls.removeOutcall(message.data);
                             break;
                         case 'token':
                             s.wsToken = message.msg;
@@ -489,6 +489,7 @@ class CallcenterRoot extends Component {
                     {showScript ?
                         <Scripts script={'<h1>Здесь будет скрипт звонка</h1>'}/>:
                         <Outcalls state={s.phoneState}
+                                  ref="outcalls"
                                   onClickInfo={this.onClickInfo}
                                   onClickClient={this.selectClient}
                                   onClickCall={this.onClickCall}/>
@@ -520,5 +521,6 @@ const root = document.getElementById('yii2-callcenter-root')
 
 const options = JSON.parse(root.dataset.options)
 const user = JSON.parse(root.dataset.user)
+const websockets = JSON.parse(root.dataset.websockets)
 
-ReactDOM.render(<CallcenterRoot options={options} user={user}/>, root)
+ReactDOM.render(<CallcenterRoot options={options} user={user} websockets={websockets}/>, root)

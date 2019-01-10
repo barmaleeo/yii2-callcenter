@@ -17,6 +17,7 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
+    "build-test": "^2.0.15",
     "jquery": "^3.3.1"
   },
   "scripts": {

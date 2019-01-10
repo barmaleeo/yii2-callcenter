@@ -16,6 +16,13 @@ export default class Outcalls extends Component {
     }
     removeOutcall(outcall){
         console.log('removeOutcall', outcall)
+        for(const n in this.state.outcalls){
+            if(this.state.outcalls[n].id==outcall){
+                this.state.outcalls.splice(n,1);
+                this.setState(this.state);
+                return;
+            }
+        }
     }
     componentDidMount(){
         const self = this;

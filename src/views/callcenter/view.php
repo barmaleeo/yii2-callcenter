@@ -34,6 +34,7 @@ $user = [
 <audio id="sound-phone" autoPlay="autoplay"></audio>
 <div id="yii2-callcenter-root"
      data-options='<?=json_encode($params)?>'
-     data-user='<?=json_encode($user)?>'>
+     data-user='<?=json_encode($user)?>'
+     data-websockets='<?=json_encode(Yii::$app->params['websockets'])?>'>
     Loading...
 </div>
