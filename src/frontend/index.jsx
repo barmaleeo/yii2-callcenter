@@ -44,8 +44,8 @@ class CallcenterRoot extends Component {
         const o = p.options;
         const c = o.sip;
 
-        this.serveWebsockets();
-        setInterval(this.serveWebsockets.bind(this), 5000);
+        // this.serveWebsockets();
+        // setInterval(this.serveWebsockets.bind(this), 5000);
 
         window.callcenterModalOpen = this.pushModal.bind(this);
         window.callcenterModalClose = this.fadeModal.bind(this);
