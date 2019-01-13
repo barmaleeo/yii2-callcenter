@@ -2,7 +2,9 @@
 
 namespace barmaleeo\callcenter\models;
 
+use app\modules\office\models\UserPhone;
 use Yii;
+use yii\base\Exception;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 
@@ -339,6 +341,82 @@ class Call extends \yii\db\ActiveRecord
         }
     }
 
+    // Добавляет исходящий звонок
+    //  $user_id        - id клиента, кому звоним
+    //  $type           - Тип звонка
+    //  $user_to        - кто будет звонить. Если 0 - может позвонить любой оператор
+    //  $phone_id       - id телефона, если 0 - основной телефон клиента
+    //  $enable_date    - дата-время, с которого звонок станет доступен. Формат MYSQL, 0 - немедленно
+    public static function addOutcall($user_id, $type , $user_to=0,
+                                      $phone_id=0, $enable_date = null, $attempt = 1) {
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        $res = false;
+        try {
+        
+            //Если телефон не указан, ищем телефон в базе
+            // GREATEST(IFNULL(date_last_incall,'0'), IFNULL(date_last_outcall,'0')
+            if($phone = UserPhone::find()->where(['user_id' => $user_id])->orderBy('main')->one()){
+                $phone_id = $phone->id;
+            }else{
+                throw new Exception('Phone not found');
+            }
+
+
+            // проверяем есть ли активный звонок с такими же параметрами
+
+            $call = static::findOne([
+                'type'      => $type,
+                'phone_id'  => $phone_id,
+                'direction' => PhoneCall::DIRECTION_OUTGOING,
+                'status'    => PhoneCall::STATUS_ACTIVE,
+            ]);
+
+
+            if (!$call) { //-------------------------------------------------------------------------
+                $call = new PhoneCall([
+                    'uid'           => $user_id,
+                    'status'        => static::STATUS_ACTIVE,
+                    'phone_id'      => $phone_id,
+                    'type'          => $type,
+                    'enable_date'   => $enable_date,
+                    'direction'     => PhoneCall::DIRECTION_OUTGOING,
+                    'attempt'       => $attempt,
+                ]);
+                $res = $call->save(false);
+                if(!$res){
+                    $callId = 0;
+                }else{
+                    $callId = $call->id;
+                }
+            } else {
+                $call->enable_date = $enable_date;
+                $call->save(false);
+                $callId = $call->id;
+                $res = true;
+            }
+            $transaction->commit();
+        }catch(\Throwable $e){
+            $transaction->rollback();
+            return false;
+        }
+        
+//        // Здесь реализуем логику снятия имеющихся звонков при поступлении нового звонка
+//        switch($call->type){
+//            case '9': // Звонок клиенту, подтвердившему доставку:
+//                static::removeUserOutcalls($user_id, false, '9');
+//        }
+
+
+
+        if ($res && $enable_date == null || strtotime($enable_date) < time()) { 
+            // если время звонка наступило, посылаем пуш-уведомление
+            $call = static::find()->where(['call.id' => $call->id])->asArray()->one();
+            \Yii::$app->websockets->pushMessage("callcenter",$call, $user_to, 'add_outcall');
+
+        }
+        return true;
+    }
 
 
 }
