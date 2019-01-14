@@ -13,6 +13,29 @@ export default class Outcalls extends Component {
     state = {outcalls:[], types:[], loading:true, error:false}
     addOutcall(outcall){
         console.log('addOutcall', outcall)
+        let k = 0;
+        for(;k<this.state.outcalls.length;k++){
+            const i = this.state.outcalls[k];
+            console.log(i,k,this.state.outcalls);
+//            if(1*i.ballast > 1*pl.ballast){
+//                break;
+//            }else if(1*i.ballast == 1*pl.ballast){
+
+                if(1*i.priority > 1*outcall.priority){
+                    break;
+                }else if(1*i.priority == 1*outcall.priority){
+                    if(1*i.attempt < 1*pl.attempt){
+                        break;
+                    }else if(1*i.attempt==1*outcall.attempt){
+                        if(i.created > outcall.created){
+                            break;
+                        }
+                    }
+                }
+ //           }
+        }
+        this.state.outcalls.splice(k, 0, outcall);
+        this.setState(this.state);
     }
     removeOutcall(outcall){
         console.log('removeOutcall', outcall)
@@ -59,7 +82,7 @@ export default class Outcalls extends Component {
                 <table className="table table-condensed outcalls">
                     <tbody>
                         {s.outcalls.map((o,n) => (
-                            <tr key={n}>
+                            <tr key={n} style={{color:'#'+o.color}}>
                                 <td className="o-date">{sdt(cDate(o.created))}</td>
                                 <td className="o-desc">
                                     <span className="glyphicon glyphicon-question-sign"></span>
@@ -73,7 +96,7 @@ export default class Outcalls extends Component {
                                         <span className="glyphicon glyphicon-user"></span>
                                     </button>
                                 </td>
-                                <td className="o-attempt">{o.attempt}1</td>
+                                <td className="o-attempt">{o.attempt}</td>
                                 <td className="o-call-button">
                                     <button className="btn btn-success btn-block btn-xs"
                                             onClick={p.onClickCall.bind(this, o.phone, o.user_id, o.id)}

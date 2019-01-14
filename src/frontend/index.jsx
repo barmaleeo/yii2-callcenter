@@ -453,7 +453,7 @@ class CallcenterRoot extends Component {
                     switch (message.type) {
                         case 'add_outcall':
                             if(message.data!== null) {
-                                //p.phoneActions.addOutcalls(message.data);
+                                self.refs.outcalls.addOutcall(message.data);
                             }else{
                                 console.log(e);
                             }

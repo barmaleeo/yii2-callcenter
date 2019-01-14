@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  * @property int $status_id
  * @property int $op_id
  * @property int $goal
+ * @property int $attempt
  * @property string $enable_time
  * @property string $start_time
  * @property string $end_time
@@ -105,12 +106,16 @@ class Call extends \yii\db\ActiveRecord
                 'user_phone.phone',
                 'user.id AS user_id',
                 'user.name',
+                'call.attempt',
+                'call_type.color',
+                'call_type.priority',
                 'call.created',
                 'call.enable_time',
                 'call.start_time',
             ])
             ->leftJoin('user_phone','user_phone.id=call.phone_id')
             ->leftJoin('user','user.id=user_phone.user_id')
+            ->leftJoin('call_type','call.type_id=call_type.id')
             ->groupBy('call.id');
     }
     public static function startIncall($params){
@@ -348,39 +353,40 @@ class Call extends \yii\db\ActiveRecord
     //  $phone_id       - id телефона, если 0 - основной телефон клиента
     //  $enable_date    - дата-время, с которого звонок станет доступен. Формат MYSQL, 0 - немедленно
     public static function addOutcall($user_id, $type , $user_to=0,
-                                      $phone_id=0, $enable_date = null, $attempt = 1) {
+                                      $phone_id=0, $enable_time = null, $attempt = 1) {
 
         $transaction = \Yii::$app->db->beginTransaction();
         $res = false;
         try {
-        
-            //Если телефон не указан, ищем телефон в базе
-            // GREATEST(IFNULL(date_last_incall,'0'), IFNULL(date_last_outcall,'0')
-            if($phone = UserPhone::find()->where(['user_id' => $user_id])->orderBy('main')->one()){
-                $phone_id = $phone->id;
-            }else{
-                throw new Exception('Phone not found');
+            
+            if($phone_id == 0) {
+                //Если телефон не указан, ищем телефон в базе
+                // GREATEST(IFNULL(date_last_incall,'0'), IFNULL(date_last_outcall,'0')
+                if ($phone = UserPhone::find()->where(['user_id' => $user_id])->orderBy('main')->one()) {
+                    $phone_id = $phone->id;
+                } else {
+                    throw new Exception('Phone not found');
+                }
             }
-
-
+            
             // проверяем есть ли активный звонок с такими же параметрами
 
             $call = static::findOne([
-                'type'      => $type,
+                'type_id'   => $type,
                 'phone_id'  => $phone_id,
-                'direction' => PhoneCall::DIRECTION_OUTGOING,
-                'status'    => PhoneCall::STATUS_ACTIVE,
+                'direction' => static::DIRECTION_OUTCALL,
+                'status_id' => static::STATUS_READY,
             ]);
 
 
             if (!$call) { //-------------------------------------------------------------------------
-                $call = new PhoneCall([
-                    'uid'           => $user_id,
-                    'status'        => static::STATUS_ACTIVE,
+                $call = new static([
+                    'user_id'       => $user_id,
+                    'status_id'     => static::STATUS_READY,
                     'phone_id'      => $phone_id,
-                    'type'          => $type,
-                    'enable_date'   => $enable_date,
-                    'direction'     => PhoneCall::DIRECTION_OUTGOING,
+                    'type_id'       => $type,
+                    'enable_time'   => $enable_time,
+                    'direction'     => static::DIRECTION_OUTCALL,
                     'attempt'       => $attempt,
                 ]);
                 $res = $call->save(false);
@@ -390,7 +396,7 @@ class Call extends \yii\db\ActiveRecord
                     $callId = $call->id;
                 }
             } else {
-                $call->enable_date = $enable_date;
+                $call->enable_time = $enable_time;
                 $call->save(false);
                 $callId = $call->id;
                 $res = true;
@@ -409,7 +415,7 @@ class Call extends \yii\db\ActiveRecord
 
 
 
-        if ($res && $enable_date == null || strtotime($enable_date) < time()) { 
+        if ($res && ($enable_time == null || strtotime($enable_time) < time())) {
             // если время звонка наступило, посылаем пуш-уведомление
             $call = static::find()->where(['call.id' => $call->id])->asArray()->one();
             \Yii::$app->websockets->pushMessage("callcenter",$call, $user_to, 'add_outcall');
