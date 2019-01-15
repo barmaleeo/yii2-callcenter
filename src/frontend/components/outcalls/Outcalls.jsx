@@ -17,14 +17,14 @@ export default class Outcalls extends Component {
         for(;k<this.state.outcalls.length;k++){
             const i = this.state.outcalls[k];
             console.log(i,k,this.state.outcalls);
-//            if(1*i.ballast > 1*pl.ballast){
+//            if(1*i.ballast > 1*outcall.ballast){
 //                break;
-//            }else if(1*i.ballast == 1*pl.ballast){
+//            }else if(1*i.ballast == 1*outcall.ballast){
 
                 if(1*i.priority > 1*outcall.priority){
                     break;
                 }else if(1*i.priority == 1*outcall.priority){
-                    if(1*i.attempt < 1*pl.attempt){
+                    if(1*i.attempt < 1*outcall.attempt){
                         break;
                     }else if(1*i.attempt==1*outcall.attempt){
                         if(i.created > outcall.created){
@@ -34,6 +34,7 @@ export default class Outcalls extends Component {
                 }
  //           }
         }
+        this.addOutcallType(outcall);
         this.state.outcalls.splice(k, 0, outcall);
         this.setState(this.state);
     }
