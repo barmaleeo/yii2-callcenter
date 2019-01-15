@@ -372,10 +372,10 @@ class Call extends \yii\db\ActiveRecord
             // проверяем есть ли активный звонок с такими же параметрами
 
             $call = static::findOne([
-                'type_id'   => $type,
-                'phone_id'  => $phone_id,
-                'direction' => static::DIRECTION_OUTCALL,
-                'status_id' => static::STATUS_READY,
+                'call.type_id'   => $type,
+                'call.phone_id'  => $phone_id,
+                'call.direction' => static::DIRECTION_OUTCALL,
+                'call.status_id' => static::STATUS_READY,
             ]);
 
 

@@ -49,7 +49,7 @@ class CallLog extends \yii\db\ActiveRecord
         $this->oid = Yii::$app->user->getId();
 
 
-        $call = Call::findOne(['id' => $this->call_id]);
+        $call = Call::findOne(['call.id' => $this->call_id]);
 
         if ($call['direction']== Call::DIRECTION_OUTCALL) { // исходящие звонки
             switch (intval($this->event_id)) {
@@ -89,8 +89,8 @@ class CallLog extends \yii\db\ActiveRecord
                             break;
                         default:
                             //Установить статус Неконтактный
-                            $phone = UserPhone::findOne($call->phone_id);
-                            $user = User::findOne($phone->user_id);
+                            $phone = UserPhone::findOne(['user_phone.id' => $call->phone_id]);
+                            $user = User::findOne(['user.id' => $phone->user_id]);
 //                            $user->setClientStatus(
 //                                UserClientStatus::STATUS_NON_CONTACT,
 //                                "Установлен статус НЕКОНТАКТНЫЙ после 5 неудачных попыток дозвона."
