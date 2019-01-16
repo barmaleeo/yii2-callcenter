@@ -2,6 +2,7 @@
 
 namespace barmaleeo\callcenter\models;
 
+use app\modules\office\models\User;
 use app\modules\office\models\UserPhone;
 use Yii;
 
