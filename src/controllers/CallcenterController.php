@@ -8,9 +8,11 @@
 
 namespace barmaleeo\callcenter\controllers;
 
+use app\modules\office\models\User;
 use barmaleeo\callcenter\models\Call;
 use barmaleeo\callcenter\models\CallLog;
 use barmaleeo\callcenter\models\CallType;
+use yii\base\ViewNotFoundException;
 
 class CallcenterController extends \yii\base\Controller
 {
@@ -67,7 +69,8 @@ class CallcenterController extends \yii\base\Controller
         $id = \Yii::$app->request->get('id', 0);
         \Yii::$app->response->data = json_encode(Call::makeOutcall($id));
     }
-
+    
+    
 
     public function actionPlayCall()
     {
@@ -78,6 +81,30 @@ class CallcenterController extends \yii\base\Controller
         
         Call::getPlayInfo($id);
 
+    }
+
+    public function actionGetScript(){
+
+        $raw = \Yii::$app->request->get();
+        $raw['url'] = '/www/';
+        $script= "";
+
+        $user = User::find()->where(['user.id' => 4])->all();
+
+        if($call = Call::findOne($raw['id'])){
+            $data = [
+                'users'     => $user,
+                'operator'  => \Yii::$app->getUser()->getIdentity()->name,
+                'script'    => $call->type_id,
+                'direction' => $call->direction,
+            ];
+            try{
+                $script= $this->renderPartial('@app/callScripts/content/'.$data['script'].$raw['url'], ['data' => $data]);
+            }catch(\Throwable $e){
+                $script= $this->renderPartial('@app/callScripts/content/default/index', ['data' => $data]);
+            }
+        }
+        \Yii::$app->response->data  = $script;
     }
 
 }
