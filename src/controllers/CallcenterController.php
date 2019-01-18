@@ -86,12 +86,14 @@ class CallcenterController extends \yii\base\Controller
     public function actionGetScript(){
 
         $raw = \Yii::$app->request->get();
-        $raw['url'] = '/www/';
+        if(!isset($raw['url'])){
+            $raw['url'] = 'index';
+        }
         $script= "";
 
-        $user = User::find()->where(['user.id' => 4])->all();
 
         if($call = Call::findOne($raw['id'])){
+            $user = User::findByCallId($call->id)->all();
             $data = [
                 'users'     => $user,
                 'operator'  => \Yii::$app->getUser()->getIdentity()->name,
@@ -99,12 +101,42 @@ class CallcenterController extends \yii\base\Controller
                 'direction' => $call->direction,
             ];
             try{
-                $script= $this->renderPartial('@app/callScripts/content/'.$data['script'].$raw['url'], ['data' => $data]);
+                $script= $this->renderPartial('@app/callScripts/content/'.$data['script'].'/'.$raw['url'], ['data' => $data]);
             }catch(\Throwable $e){
                 $script= $this->renderPartial('@app/callScripts/content/default/index', ['data' => $data]);
             }
         }
         \Yii::$app->response->data  = $script;
     }
+
+    public function actionTestScript(){
+
+        $raw = \Yii::$app->request->get();
+        if(!isset($raw['url'])){
+            $raw['url'] = 'index';
+        }
+        $script= "";
+
+
+        if($call = Call::findOne($raw['id'])){
+            $user = User::findByCallId($call->id)->all();
+            $data = [
+                'users'     => $user,
+                'operator'  => \Yii::$app->getUser()->getIdentity()->name,
+                'script'    => $call->type_id,
+                'direction' => $call->direction,
+            ];
+            try{
+                $script= $this->renderPartial('@app/callScripts/content/'.$data['script'].'/'.$raw['url'], ['data' => $data]);
+            }catch(\Throwable $e){
+                $script= $this->renderPartial('@app/callScripts/content/default/index', ['data' => $data]);
+            }
+        }
+        $this->layout = 'testScript.php';
+        return $this->render('testScript',['content' => $script]);
+
+    }
+
+
 
 }

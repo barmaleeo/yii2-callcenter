@@ -487,7 +487,7 @@ class CallcenterRoot extends Component {
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
                 <div className="c-o-left">
                     {showScript ?
-                        <Scripts script={'<h1>Здесь будет скрипт звонка</h1>'}/>:
+                        <Scripts callId={s.callId}/>:
                         <Outcalls state={s.phoneState}
                                   ref="outcalls"
                                   onClickInfo={this.onClickInfo}
@@ -519,8 +519,11 @@ class CallcenterRoot extends Component {
 
 const root = document.getElementById('yii2-callcenter-root')
 
-const options = JSON.parse(root.dataset.options)
-const user = JSON.parse(root.dataset.user)
-const websockets = JSON.parse(root.dataset.websockets)
+if(root) {
 
-ReactDOM.render(<CallcenterRoot options={options} user={user} websockets={websockets}/>, root)
+    const options = JSON.parse(root.dataset.options)
+    const user = JSON.parse(root.dataset.user)
+    const websockets = JSON.parse(root.dataset.websockets)
+
+    ReactDOM.render(<CallcenterRoot options={options} user={user} websockets={websockets}/>, root)
+}
