@@ -12,6 +12,9 @@
         <div class="c-o-left">
 
             <div class="cc-scripts-outher">
+                <div class="c-s-back">
+                    <button onclick="CcGoBack()">back</button>
+                </div>
                 <div id="callcenter-script-body" class="cc-script">
                 <?= $content ?>
                 </div>

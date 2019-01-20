@@ -4,4 +4,10 @@ div.cc-scripts-outher {
   padding-right: 13px;
   overflow-y: auto;
   padding-bottom: 20px;
+
+  >div.c-s-back{
+    position: absolute;
+    left:1px;
+    top:1px;
+  }
 }

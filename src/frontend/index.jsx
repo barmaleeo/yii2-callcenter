@@ -494,7 +494,7 @@ class CallcenterRoot extends Component {
                                   onClickClient={this.selectClient}
                                   onClickCall={this.onClickCall}/>
                     }
-                    <Client options = {o}/>
+                    <Client options={o}/>
                     <Wiki/>
                 </div>
                 <div className="c-o-right">
@@ -526,4 +526,21 @@ if(root) {
     const websockets = JSON.parse(root.dataset.websockets)
 
     ReactDOM.render(<CallcenterRoot options={options} user={user} websockets={websockets}/>, root)
+
+    $('#callcenter-script-body').on('click', 'td.answer', (e) => {
+        console.log(e.target, e.currentTarget);
+        let offset;
+
+        if(e.target == e.currentTarget){
+            offset = e.target.offsetTop;
+        }else{
+            offset = e.target.offsetTop + e.currentTarget.offsetTop
+
+        }
+
+        $('div.cc-scripts-outher').animate({scrollTop: offset}, "fast");
+        return false;
+
+    });
+
 }
