@@ -55,6 +55,8 @@ class Call extends \yii\db\ActiveRecord
     public $name;
     public $phone;
     public $user_id;
+    public $color;
+    public $priority;
 
     /**
      * {@inheritdoc}
@@ -427,6 +429,38 @@ class Call extends \yii\db\ActiveRecord
 
         }
         return true;
+    }
+
+    public static function sendAll(){
+        $calls = static::find()
+            ->where([
+                'call.direction' => self::DIRECTION_OUTCALL,
+                'call.status_id' => self::STATUS_READY,
+                'call.notify' => 0
+            ])
+            ->andWhere(['<','call.enable_time', new Expression('NOW()'),])
+            ->all();
+        foreach($calls as $call){
+            $callArray = [
+                'id'            => $call->id,
+                'type_id'       => $call->type_id,
+                'status_id'     => $call->status_id,
+                'phone_id'      => $call->phone_id,
+                'phone'         => $call->phone,
+                'user_id'       => $call->user_id,
+                'name'          => $call->name,
+                'attempt'       => $call->attempt,
+                'color'         => $call->color,
+                'priority'      => $call->priority,
+                'created'       => $call->created,
+                'enable_time'   => $call->enable_time,
+                'start_time'    => $call->start_time,
+            ];
+            
+            \Yii::$app->websockets->pushMessage("callcenter", $callArray, $call->op_id, 'add_outcall');
+            $call->notify = 1;
+            $call->save(false);
+        }
     }
 
 
