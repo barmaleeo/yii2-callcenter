@@ -103,6 +103,7 @@ class Call extends \yii\db\ActiveRecord
         return parent::find()
             ->select([
                 'call.id',
+                'call.direction',
                 'call.type_id',
                 'call.status_id',
                 'call.phone_id',
