@@ -14,6 +14,7 @@ use barmaleeo\callcenter\models\Call;
 use barmaleeo\callcenter\models\CallLog;
 use barmaleeo\callcenter\models\CallType;
 use yii\base\ViewNotFoundException;
+use yii\db\Expression;
 
 class CallcenterController extends \yii\base\Controller
 {
