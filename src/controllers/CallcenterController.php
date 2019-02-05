@@ -9,6 +9,7 @@
 namespace barmaleeo\callcenter\controllers;
 
 use app\modules\office\models\User;
+use app\modules\office\models\UserTeam;
 use barmaleeo\callcenter\models\Call;
 use barmaleeo\callcenter\models\CallLog;
 use barmaleeo\callcenter\models\CallType;
@@ -137,6 +138,8 @@ class CallcenterController extends \yii\base\Controller
 
     }
 
-
+    public function actionGetTransfers(){
+        return $this->asJson(UserTeam::getTransfers());
+    }
 
 }

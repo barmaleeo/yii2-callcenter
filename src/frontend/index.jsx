@@ -49,7 +49,7 @@ class CallcenterRoot extends Component {
 
         window.callcenterModalOpen = this.pushModal.bind(this);
         window.callcenterModalClose = this.fadeModal.bind(this);
-        window.callcenterLogCall = this.logCall.bind(this)
+        window.LogCall = this.logCall.bind(this)
 
         const options = {
             sessionDescriptionHandlerOptions: {
