@@ -216,7 +216,7 @@ class Call extends \yii\db\ActiveRecord
             $log->event_id  = CallLog::CALL_EVENT_FINISH;
             $res = $log->save(false);
 
-            \Yii::warning($call);
+            //\Yii::warning($call);
 
             if($call->direction == static::DIRECTION_INCALL &&
                 !CallLog::findOne(['call_log.call_id' => $call->id, 'call_log.event_id' => CallLog::CALL_EVENT_ANSWER])){
@@ -367,9 +367,9 @@ class Call extends \yii\db\ActiveRecord
     public static function addOutcall($user_id, $type , $user_to=0,
                                       $phone_id=0, $enable_time = null, $attempt = 1) {
 
-//        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = \Yii::$app->db->beginTransaction();
         $res = false;
-//        try {
+        try {
             
             if($phone_id == 0) {
                 //Если телефон не указан, ищем телефон в базе
@@ -413,11 +413,11 @@ class Call extends \yii\db\ActiveRecord
                 $callId = $call->id;
                 $res = true;
             }
-//            $transaction->commit();
-//        }catch(\Throwable $e){
-//            $transaction->rollback();
-//            return false;
-//        }
+            $transaction->commit();
+        }catch(\Throwable $e){
+            $transaction->rollback();
+            return false;
+        }
         
 //        // Здесь реализуем логику снятия имеющихся звонков при поступлении нового звонка
 //        switch($call->type){

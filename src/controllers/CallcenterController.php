@@ -43,7 +43,8 @@ class CallcenterController extends \yii\base\Controller
             $outcalls = [];
         }else{
             $outcalls = Call::find()
-                ->where(['call.status_id' => Call::STATUS_READY])
+                ->where(['call.status_id' => Call::STATUS_READY,])
+                ->andWhere(['<','call.enable_time', new Expression('NOW()'),])
                 ->orderBy('priority, attempt DESC, call.created')
                 ->asArray()
                 ->all();
