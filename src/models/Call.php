@@ -84,6 +84,7 @@ class Call extends \yii\db\ActiveRecord
     {
         return [
             'id'            => Yii::t('common', 'ID'),
+            'direction'     => Yii::t('common', 'Direction'),
             'type_id'       => Yii::t('common', 'Type ID'),
             'phone_id'      => Yii::t('common', 'Phone ID'),
             'status_id'     => Yii::t('common', 'Status ID'),
