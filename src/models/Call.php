@@ -214,6 +214,8 @@ class Call extends \yii\db\ActiveRecord
             $log->event_id  = CallLog::CALL_EVENT_FINISH;
             $res = $log->save(false);
 
+            \Yii::warning($call->asArray());
+
             if($call->direction == static::DIRECTION_INCALL &&
                 !CallLog::findOne(['call_log.call_id' => $call->id, 'call_log.event_id' => CallLog::CALL_EVENT_ANSWER])){
                 // Создаем звонок по неответу
