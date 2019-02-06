@@ -20,7 +20,7 @@ export default class Scripts extends Component {
         this.history.push({url: url})
         this.setState({loading:true})
         const self = this;
-        $.get('callcenter/get-script', {id:1, url:url}, (r) => {
+        $.get('callcenter/get-script', {id:this.props.callId, url:url}, (r) => {
             self.setState({script:r, loading:false})
         }).fail((e) => {
             console.log('loadScript Error: ',e)

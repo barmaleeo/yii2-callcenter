@@ -441,7 +441,7 @@ class Call extends \yii\db\ActiveRecord
             ->where([
                 'call.direction' => self::DIRECTION_OUTCALL,
                 'call.status_id' => self::STATUS_READY,
-                'call.notify' => 0
+                'call.notify'    => 0
             ])
             ->andWhere(['<','call.enable_time', new Expression('NOW()'),])
             ->all();
