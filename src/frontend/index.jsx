@@ -64,11 +64,13 @@ class CallcenterRoot extends Component {
             uri: c.name+'@'+c.url,
             transportOptions: {
                 wsServers: [c.ws],
-                traceSip: true,
+                //traceSip: true,
+                traceSip: false,
                 maxReconnectionAttempts:1000000000
             },
             log:{
-                level:'debug',
+                //level:'debug',
+                level:'warn',
             },
             authorizationUser:  c.name,
             password:           c.password,
