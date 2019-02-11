@@ -64,9 +64,9 @@ class CallLog extends \yii\db\ActiveRecord
 //                    break;
                 case static::CALL_EVENT_BUSY:       // Номер занят
                 case static::CALL_EVENT_NO_ANSWER:  // Номер не отвечает
-                case 60:// Абонент недоступен
-                case 61:// Автоответчик
-                case 62:// В сети не зарегистрирован
+                case '60':// Абонент недоступен
+                case '61':// Автоответчик
+                case '62':// В сети не зарегистрирован
                     $nextAttempt = ++$call->attempt;
                     switch($call->attempt){
                         case '0':
