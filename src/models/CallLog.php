@@ -22,7 +22,7 @@ class CallLog extends \yii\db\ActiveRecord
     const CALL_EVENT_ERROR                  = 1;
     const CALL_EVENT_CALLING                = 2; // progress
     const CALL_EVENT_BUSY                   = 3; // busy
-    const CALL_EVENT_NO_ANSWER              = 4; // no_answer
+    const CALL_EVENT_NO_ANSWER              = 4; // no_answer или нажата кнопка не отвечает
     const CALL_EVENT_MAKE_OUTCALL           = 5;
     const CALL_EVENT_ANSWER                 = 6;
     const CALL_EVENT_RINGING                = 7;
@@ -37,6 +37,7 @@ class CallLog extends \yii\db\ActiveRecord
     const CALL_EVENT_MUTED                  = 17;
     const CALL_EVENT_UNMUTED                = 18;
     const CALL_EVENT_START_VOICEMAIL        = 19;
+    const CALL_EVENT_PRESS_VOICEMAIL        = 20;
     //const CALL_EVENT_RINGING                = 0;
     const CALL_EVENT_OUTGOING_TERMINATED    = 301;
     const CALL_EVENT_INCALL_REJECTED        = 302;
