@@ -16,6 +16,11 @@ export default class Outcalls extends Component {
         let k = 0;
         for(;k<this.state.outcalls.length;k++){
             const i = this.state.outcalls[k];
+            if(i.id == outcall.id){
+                this.state.outcalls[k] = outcall
+                this.setState(this.state);
+                return;
+            }
             console.log(i,k,this.state.outcalls);
 //            if(1*i.ballast > 1*outcall.ballast){
 //                break;
