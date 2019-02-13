@@ -21,7 +21,7 @@ export default class Outcalls extends Component {
                 this.setState(this.state);
                 return;
             }
-            console.log(i,k,this.state.outcalls);
+            //console.log(i,k,this.state.outcalls);
 //            if(1*i.ballast > 1*outcall.ballast){
 //                break;
 //            }else if(1*i.ballast == 1*outcall.ballast){
