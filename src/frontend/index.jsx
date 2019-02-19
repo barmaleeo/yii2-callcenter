@@ -51,6 +51,7 @@ class CallcenterRoot extends Component {
         window.callcenterModalClose = this.fadeModal.bind(this);
         window.logCall = this.logCall.bind(this)
 
+
         const options = {
             sessionDescriptionHandlerOptions: {
                 constraints: {audio: true, video: false},
