@@ -34,18 +34,12 @@ export default class Modal extends Component {
     render() {
         const p = this.props;
         const s = this.state;
-        let bodyContent  = '';
-        let header = '';
+        let o;
         if(typeof p.data == 'string'){
-            bodyContent = p.data
+            o = {content:p.data}
         } else if(typeof p.data == 'object') {
-            if (p.data.header) {
-                header = p.data.header;
-            }
-            if (p.data.content) {
-                bodyContent = p.data.content;
-            }
-        }
+            o = p.data;
+         }
 
         return (
             <div className={'callcenter-modal-outher modal fade show'+s.show}
@@ -55,13 +49,18 @@ export default class Modal extends Component {
                     <div className="modal-content"
                          onClick={this.handleClickContent}>
                         <div className="modal-header">
-                            <h4>{header}</h4>
+                            <h4>{o.header}</h4>
                         </div>
-                        <div className="modal-body">{bodyContent}</div>
-                        <div className="modal-footer">
-                             <button className="btn btn-default"
-                                     onClick={this.handleCloseModal.bind(this)}>Закрыть</button>
-                        </div>
+                        {o.body === false ? <div>{o.content}</div>:
+                            <div className="modal-body">{o.content}</div>
+                        }
+                        {o.footer === false ? null :
+                            <div className="modal-footer">
+                                <button className="btn btn-default"
+                                        onClick={this.handleCloseModal.bind(this)}>Закрыть
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
