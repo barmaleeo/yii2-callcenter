@@ -45,7 +45,7 @@ export default class Modal extends Component {
             <div className={'callcenter-modal-outher modal fade show'+s.show}
                  onClick={this.handleCloseModal.bind(this)}
                  style={{backgroundColor:'rgba(1,1,1,0.4)'}}>
-                <div className="modal-dialog">
+                <div className={'modal-dialog' + (o.small?'':' modal-lg')}>
                     <div className="modal-content"
                          onClick={this.handleClickContent}>
                         <div className="modal-header">
