@@ -92,7 +92,7 @@ class CallLog extends \yii\db\ActiveRecord
                         default:
                             //Установить статус Неконтактный
                             $phone = UserPhone::findOne(['user_phone.id' => $call->phone_id]);
-                            $user = User::findOne(['user.id' => $phone->user_id]);
+                            $user = User::findOne($phone->user_id);
 //                            $user->setClientStatus(
 //                                UserClientStatus::STATUS_NON_CONTACT,
 //                                "Установлен статус НЕКОНТАКТНЫЙ после 5 неудачных попыток дозвона."
