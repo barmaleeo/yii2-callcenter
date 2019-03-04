@@ -129,9 +129,13 @@ class CallcenterRoot extends Component {
                     if(self.state.answer) {
                         self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
                     }
+                    self.refs.soundPhoneBeep.currentTime = 0;
+                    self.refs.soundPhoneBeep.play();
                 })
                 session.on('bye', function (e) {
                     self.logCall(13, 'Окончание разговора');
+                    self.refs.soundPhoneBeep.currentTime = 0;
+                    self.refs.soundPhoneBeep.play();
                 })
                 session.on('muted', (data) => {
                     if (data.audio) {
@@ -335,7 +339,8 @@ class CallcenterRoot extends Component {
             }else { // ошибка соединения
                 self.logCall(1, "Ошибка соединения", 0, cause);
             }
-
+            self.refs.soundPhoneBeep.currentTime = 0;
+            self.refs.soundPhoneBeep.play();
         })
         self.state.session.on ('muted', (data) => {
             if (data.audio) {
@@ -351,7 +356,8 @@ class CallcenterRoot extends Component {
 
         self.state.session.on('bye', (e) => {
             self.logCall(13,'Окончание разговора');
-
+            self.refs.soundPhoneBeep.currentTime = 0;
+            self.refs.soundPhoneBeep.play();
         })
         self.state.session.on('terminated',(cause) => {
             console.log('outgoing call terminated' + cause);
@@ -489,6 +495,7 @@ class CallcenterRoot extends Component {
                 <audio ref="soundPhoneRingback" src="/sound/phone_wait.mp3" loop />
                 <audio ref="soundPhoneRing" src="/sound/phone_ring.mp3" loop />
                 <audio ref="soundPhoneBusy" src="/sound/phone_busy.mp3"/>
+                <audio ref="soundPhoneBeep" src="/sound/beep.mp3"/>
                 <div className="c-o-left">
                     {showScript ?
                         <Scripts callId={s.callId}/>:
