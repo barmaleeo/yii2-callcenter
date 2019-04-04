@@ -36,6 +36,7 @@ class CallcenterRoot extends Component {
         userId:0,
         display:'',
         modal:[],
+        queue:[],
     }
     componentDidMount(){
         const self = this;
@@ -93,7 +94,7 @@ class CallcenterRoot extends Component {
                 } catch (e) {
                     console.log(e);
                 }
-                
+
                 self.logCall(8, 'Включен сигнал вызова');
                 self.refs.soundPhoneRing.play();
                 s.session = session;
@@ -126,7 +127,7 @@ class CallcenterRoot extends Component {
 
                 });
                 session.on('failed', function (e, cause) {
-                    if(self.state.answer) {
+                    if (self.state.answer) {
                         self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
                     }
                     self.refs.soundPhoneBeep.currentTime = 0;
@@ -148,28 +149,40 @@ class CallcenterRoot extends Component {
                         self.logCall(18, 'Сall is Unmuted');
                     }
                 });
+
+                session.on('terminated', (cause) => {
+
+                    //if(session)
+                    console.log('incoming call terminated' + cause);
+
+                    if (self.state.phoneState == STATE_READY) {
+                        // Здесь делаем сохранение сессии
+
+                    } else if (self.state.answer == false) {
+                        self.state.phoneState = STATE_READY;
+                    } else if (self.state.phoneState == STATE_GO_OFF) {
+                        self.state.phoneState = STATE_OFF;
+                    } else {
+                        self.state.phoneState = STATE_BUSY;
+                    }
+                    self.state.answer = false;
+                    self.refs.soundPhoneRing.pause();
+                    self.refs.soundPhoneRing.currentTime = 0;
+                    self.state.session = false;
+                    self.setState(self.state);
+                });
+            }else{
+                session.on('terminated', (cause) => {
+                    for(let n in self.state.queue.length){
+                        if(self.state.queue[n] === session){
+                            self.state.queue.splice(n, 1)
+                            self.SetState(self.atate)
+                        }
+                    }
+                });
+                self.state.queue.push(session)
+                self.SetState(self.atate)
             }
-            session.on('terminated', (cause) => {
-
-                //if(session)
-                console.log('incoming call terminated' + cause);
-
-                if(self.state.phoneState == STATE_READY) {
-                    // Здесь делаем сохранение сессии
-
-                } else if(self.state.answer == false){
-                    self.state.phoneState = STATE_READY;
-                } else if(self.state.phoneState == STATE_GO_OFF){
-                    self.state.phoneState = STATE_OFF;
-                } else {
-                    self.state.phoneState = STATE_BUSY;
-                }
-                self.state.answer = false;
-                self.refs.soundPhoneRing.pause();
-                self.refs.soundPhoneRing.currentTime = 0;
-                self.state.session = false;
-                self.setState(self.state);
-            });
         });
         s.ua.on('registered', () => {
             const s = this.state;
