@@ -176,13 +176,13 @@ class CallcenterRoot extends Component {
                     for(let n in self.state.queue){
                         if(self.state.queue[n] === session){
                             self.state.queue.splice(n, 1)
-                            self.SetState(self.state)
+                            self.setState(self.state)
                             break;
                         }
                     }
                 });
                 self.state.queue.push(session)
-                self.SetState(self.state)
+                self.setState(self.state)
             }
         });
         s.ua.on('registered', () => {
