@@ -147,7 +147,9 @@ export default class Phone extends Component {
         return (
             <div className="cc-phone-outher">
                 <div className="p-o-block-wrapper p-o-logo">
-                    <div className="o-l-lines">0</div>
+                    <div className={'o-l-lines'+(p.queue.length>0?' blink':'')}>
+                        {p.queue.length}
+                    </div>
                     <div className="o-l-img" style={style}>{logo}</div>
                     <div className={'o-l-power'+powerClass}
                          onClick={p.onClickPower}>

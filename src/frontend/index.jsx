@@ -530,6 +530,7 @@ class CallcenterRoot extends Component {
                            onClickCustom={this.onClickCustom}
                            logCall={this.logCall}
                            display={s.display}
+                           queue={s.queue}
                            state={s.phoneState}
                            wsState={s.wsOk}
                            options={o}

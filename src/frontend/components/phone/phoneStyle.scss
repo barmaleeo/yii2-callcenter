@@ -20,6 +20,36 @@ div.cc-phone-outher{
       text-align: center;
       line-height: 48px;
       font-size: 30px;
+
+
+
+
+      &.blink {
+        -webkit-animation: waiting-call-container 0.4s linear infinite;
+        animation: waiting-call-container 0.4s linear infinite;
+      }
+      @-webkit-keyframes waiting-call-container {
+        50% {
+          color: #333;
+        }
+        100% {
+          color: #41f341;
+        }
+      }
+      @keyframes waiting-call-container {
+        50% {
+          color: #333;
+        }
+        100% {
+          color: #41f341;
+        }
+      }
+
+
+
+
+
+
     }
     >div.o-l-img{
       height: 48px;
@@ -50,6 +80,9 @@ div.cc-phone-outher{
         background: #bbeec8;
       }
     }
+  }
+  div.p-o-block-wrapper{
+
   }
   div.p-o-number{
     display: flex;
