@@ -31,7 +31,12 @@ $user = [
 
 
 ?>
-<audio id="sound-phone" autoPlay="autoplay"></audio>
+<audio id="sound-phone" autoplay="autoplay"></audio>
+<audio id="sound-pone-ringback" src="/sound/phone_wait.mp3" loop />
+<audio id="sound-phone-ring" src="/sound/phone_ring.mp3" loop />
+<audio id="sound-phone-busy" src="/sound/phone_busy.mp3"/>
+<audio id="sound-phone-beep" src="/sound/beep.mp3"/>
+
 <div id="yii2-callcenter-root"
      data-options='<?=json_encode($params)?>'
      data-user='<?=json_encode($user)?>'
