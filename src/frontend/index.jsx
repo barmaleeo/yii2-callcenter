@@ -511,6 +511,7 @@ class CallcenterRoot extends Component {
                 {s.modal.length>0 && <Modal ref="modal" data={s.modal[s.modal.length-1]} onClose={this.closeModal}/>}
                 <div className="c-o-left">
                     {showScript && <Scripts callId={s.callId}/>}
+                    
                     <Outcalls state={s.phoneState}
                               ref="outcalls"
                               show={!showScript}
