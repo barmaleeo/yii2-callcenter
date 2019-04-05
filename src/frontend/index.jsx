@@ -510,14 +510,14 @@ class CallcenterRoot extends Component {
             <div className="cc-outher">
                 {s.modal.length>0 && <Modal ref="modal" data={s.modal[s.modal.length-1]} onClose={this.closeModal}/>}
                 <div className="c-o-left">
-                    {showScript ?
-                        <Scripts callId={s.callId}/>:
-                        <Outcalls state={s.phoneState}
-                                  ref="outcalls"
-                                  onClickInfo={this.onClickInfo}
-                                  onClickClient={this.selectClient}
-                                  onClickCall={this.onClickCall}/>
-                    }
+                    {showScript ? <Scripts callId={s.callId}/>}
+                    <Outcalls state={s.phoneState}
+                              ref="outcalls"
+                              show={!showScript}
+                              onClickInfo={this.onClickInfo}
+                              onClickClient={this.selectClient}
+                              onClickCall={this.onClickCall}/>
+                    
                     <Client options={o}/>
                     <Wiki/>
                 </div>

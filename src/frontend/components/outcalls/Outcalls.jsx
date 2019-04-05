@@ -84,7 +84,7 @@ export default class Outcalls extends Component {
         const p = this.props;
         const s = this.state;
         return (
-            <div className="cc-outcalls-outher">
+            <div className="cc-outcalls-outher" style={{display:p.show?'block':'none'}}>
                 <table className="table table-condensed outcalls">
                     <tbody>
                         {s.outcalls.map((o,n) => (
