@@ -241,7 +241,7 @@ class CallcenterRoot extends Component {
         console.log('clickCancel', this)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
-            if(this.state.queue.lenggth>0){
+            if(this.state.queue.length>0){
                 const session = this.state.queue.shift();
                 this.acceptSession(session)
             }else {
