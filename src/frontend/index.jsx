@@ -41,10 +41,9 @@ class CallcenterRoot extends Component {
         modal:[],
         queue:[],
     }
-    acceptSession(session){
+    acceptSession(session, self){
 
-        const self = this;
-        const s = this.state;
+        const s = self.state;
 
         try {
             const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
@@ -179,7 +178,7 @@ class CallcenterRoot extends Component {
             const self = this;
             const s = this.state;
             if(s.phoneState == STATE_READY) {
-                this.acceptSession(session)
+                this.acceptSession(session, this)
             }else{
                 session.on('terminated', (cause) => {
                     for(let n in self.state.queue){
@@ -244,10 +243,12 @@ class CallcenterRoot extends Component {
                 this.state.phoneState = STATE_READY;
                 this.state.callId = 0;
                 this.state.display = '';
+                const self = this;
                 this.setState(this.state, () => {
-                    if(this.state.queue.length>0){
-                        const session = this.state.queue.shift();
-                        this.acceptSession(session)
+                    if(self.state.queue.length>0){
+                        const session = self.state.queue.shift();
+                        console.log('session to be accepted', session)
+                        self.acceptSession(session, self)
                     }
                 })
         }else if(this.state.session){
