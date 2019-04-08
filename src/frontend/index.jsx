@@ -241,15 +241,15 @@ class CallcenterRoot extends Component {
         console.log('clickCancel', this)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
-            if(this.state.queue.length>0){
-                const session = this.state.queue.shift();
-                this.acceptSession(session)
-            }else {
                 this.state.phoneState = STATE_READY;
                 this.state.callId = 0;
                 this.state.display = '';
-                this.setState(this.state)
-            }
+                this.setState(this.state, () => {
+                    if(this.state.queue.length>0){
+                        const session = this.state.queue.shift();
+                        this.acceptSession(session)
+                    }
+                })
         }else if(this.state.session){
             this.state.session.terminate()
             this.state.session = false;
