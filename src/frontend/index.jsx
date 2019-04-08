@@ -41,6 +41,97 @@ class CallcenterRoot extends Component {
         modal:[],
         queue:[],
     }
+    acceptSession(session){
+
+        const self = this;
+        const s = this.state;
+
+        try {
+            const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
+            s.userId = stats.id;
+            s.callId = stats.call_id;
+            self.selectClient(s.userId);
+        } catch (e) {
+            console.log(e);
+        }
+
+        self.logCall(8, 'Включен сигнал вызова');
+        self.state.soundPhoneRing.play();
+        s.session = session;
+        s.phoneState = STATE_RINGING;
+        s.display = s.session.remoteIdentity.displayName;
+        self.setState(s);
+
+
+        //session.accept();
+
+        session.on('accepted', function (e) {
+
+            self.state.soundPhoneRing.pause();
+            self.state.soundPhoneRing.currentTime = 0;
+
+            const pc = session.sessionDescriptionHandler.peerConnection;
+            const remoteStream = new MediaStream();
+            pc.getReceivers().forEach(function (receiver) {
+                const track = receiver.track;
+                if (track) {
+                    remoteStream.addTrack(track);
+                }
+            });
+            s.soundPhone.srcObject = remoteStream;
+
+            s.phoneState = STATE_TALKING;
+            self.setState(s);
+            console.log('Incoming call accepted', session);
+            self.logCall(10, 'Начало разговора');
+
+        });
+        session.on('failed', function (e, cause) {
+            if (self.state.answer) {
+                self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
+            }
+            self.state.soundPhoneBeep.currentTime = 0;
+            self.state.soundPhoneBeep.play();
+        })
+        session.on('bye', function (e) {
+            self.logCall(13, 'Окончание разговора');
+            self.state.soundPhoneBeep.currentTime = 0;
+            self.state.soundPhoneBeep.play();
+        })
+        session.on('muted', (data) => {
+            if (data.audio) {
+                self.logCall(17, 'Сall is Muted');
+            }
+        });
+
+        session.on('unmuted', (data) => {
+            if (data.audio) {
+                self.logCall(18, 'Сall is Unmuted');
+            }
+        });
+
+        session.on('terminated', (cause) => {
+
+            //if(session)
+            console.log('incoming call terminated' + cause);
+
+            if (self.state.phoneState == STATE_READY) {
+                // Здесь делаем сохранение сессии
+
+            } else if (self.state.answer == false) {
+                self.state.phoneState = STATE_READY;
+            } else if (self.state.phoneState == STATE_GO_OFF) {
+                self.state.phoneState = STATE_OFF;
+            } else {
+                self.state.phoneState = STATE_BUSY;
+            }
+            self.state.answer = false;
+            self.state.soundPhoneRing.pause();
+            self.state.soundPhoneRing.currentTime = 0;
+            self.state.session = false;
+            self.setState(self.state);
+        });
+    }
     componentDidMount(){
         const self = this;
         const p = this.props;
@@ -88,92 +179,7 @@ class CallcenterRoot extends Component {
             const self = this;
             const s = this.state;
             if(s.phoneState == STATE_READY) {
-
-                try {
-                    const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
-                    s.userId = stats.id;
-                    s.callId = stats.call_id;
-                    self.selectClient(s.userId);
-                } catch (e) {
-                    console.log(e);
-                }
-
-                self.logCall(8, 'Включен сигнал вызова');
-                self.state.soundPhoneRing.play();
-                s.session = session;
-                s.phoneState = STATE_RINGING;
-                s.display = s.session.remoteIdentity.displayName;
-                self.setState(s);
-
-
-                //session.accept();
-
-                session.on('accepted', function (e) {
-
-                    self.state.soundPhoneRing.pause();
-                    self.state.soundPhoneRing.currentTime = 0;
-
-                    const pc = session.sessionDescriptionHandler.peerConnection;
-                    const remoteStream = new MediaStream();
-                    pc.getReceivers().forEach(function (receiver) {
-                        const track = receiver.track;
-                        if (track) {
-                            remoteStream.addTrack(track);
-                        }
-                    });
-                    s.soundPhone.srcObject = remoteStream;
-
-                    s.phoneState = STATE_TALKING;
-                    self.setState(s);
-                    console.log('Incoming call accepted', session);
-                    self.logCall(10, 'Начало разговора');
-
-                });
-                session.on('failed', function (e, cause) {
-                    if (self.state.answer) {
-                        self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
-                    }
-                    self.state.soundPhoneBeep.currentTime = 0;
-                    self.state.soundPhoneBeep.play();
-                })
-                session.on('bye', function (e) {
-                    self.logCall(13, 'Окончание разговора');
-                    self.state.soundPhoneBeep.currentTime = 0;
-                    self.state.soundPhoneBeep.play();
-                })
-                session.on('muted', (data) => {
-                    if (data.audio) {
-                        self.logCall(17, 'Сall is Muted');
-                    }
-                });
-
-                session.on('unmuted', (data) => {
-                    if (data.audio) {
-                        self.logCall(18, 'Сall is Unmuted');
-                    }
-                });
-
-                session.on('terminated', (cause) => {
-
-                    //if(session)
-                    console.log('incoming call terminated' + cause);
-
-                    if (self.state.phoneState == STATE_READY) {
-                        // Здесь делаем сохранение сессии
-
-                    } else if (self.state.answer == false) {
-                        self.state.phoneState = STATE_READY;
-                    } else if (self.state.phoneState == STATE_GO_OFF) {
-                        self.state.phoneState = STATE_OFF;
-                    } else {
-                        self.state.phoneState = STATE_BUSY;
-                    }
-                    self.state.answer = false;
-                    self.state.soundPhoneRing.pause();
-                    self.state.soundPhoneRing.currentTime = 0;
-                    self.state.session = false;
-                    self.setState(self.state);
-                });
+                this.acceptSession(session)
             }else{
                 session.on('terminated', (cause) => {
                     for(let n in self.state.queue){
@@ -235,10 +241,15 @@ class CallcenterRoot extends Component {
         console.log('clickCancel', this)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
         if(this.state.phoneState == STATE_BUSY){
-            this.state.phoneState = STATE_READY;
-            this.state.callId = 0;
-            this.state.display = '';
-            this.setState(this.state)
+            if(this.state.queue.lenggth>0){
+                const session = this.state.queue.shift();
+                this.acceptSession(session)
+            }else {
+                this.state.phoneState = STATE_READY;
+                this.state.callId = 0;
+                this.state.display = '';
+                this.setState(this.state)
+            }
         }else if(this.state.session){
             this.state.session.terminate()
             this.state.session = false;
