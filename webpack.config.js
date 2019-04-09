@@ -23,7 +23,6 @@ module.exports = {
         filename:"js/callcenter.js"
     },
     resolve: {
-        modules: [path.join(__dirname, '../../npm-asset'), 'node_modules'],
         extensions: ['.css','.scss','.sass', '.js', '.jsx']
     },
     module: {
