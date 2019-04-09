@@ -43,6 +43,9 @@ class CallcenterRoot extends Component {
     }
     acceptSession(session, self){
 
+        console.log('ACCEPT SESSION', session, self);
+
+
         const s = self.state;
 
         try {
@@ -239,13 +242,16 @@ class CallcenterRoot extends Component {
     onClickCancel = (e) => {
         console.log('clickCancel', this)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
+        const self = this;
         if(this.state.phoneState == STATE_BUSY){
                 this.state.phoneState = STATE_READY;
                 this.state.callId = 0;
                 this.state.display = '';
-                const self = this;
+                console.log('OnClickCancel STATE_BUSY')
                 this.setState(this.state, () => {
                     if(self.state.queue.length>0){
+                        console.log('OnClickCancel QUEUE NOT EMPRY', self.state)
+
                         const session = self.state.queue.shift();
                         console.log('session to be accepted', session)
                         self.acceptSession(session, self)
@@ -256,6 +262,8 @@ class CallcenterRoot extends Component {
             this.state.session = false;
             this.setState(this.state)
         }
+        console.log('OnClickCancel FINISH')
+
     };
     onClickAnswer = () => {
         if(this.state.session && this.state.phoneState == STATE_RINGING){
