@@ -43,7 +43,7 @@ class CallcenterRoot extends Component {
     }
     acceptSession(session, self){
 
-        console.log('ACCEPT SESSION', session, self);
+        //console.log('ACCEPT SESSION', session, self);
 
 
         const s = self.state;
@@ -67,7 +67,7 @@ class CallcenterRoot extends Component {
         //session.accept();
 
         session.on('accepted', function (e) {
-            console.log('OnAccepted Entering', session, self.state.phoneState);
+            //console.log('OnAccepted Entering', session, self.state.phoneState);
 
             self.state.soundPhoneRing.pause();
             self.state.soundPhoneRing.currentTime = 0;
@@ -84,7 +84,7 @@ class CallcenterRoot extends Component {
 
             self.state.phoneState = STATE_TALKING;
             self.setState(self.state);
-            console.log('Incoming call accepted', session);
+            //console.log('Incoming call accepted', session);
             self.logCall(10, 'Начало разговора');
 
         });
@@ -115,21 +115,21 @@ class CallcenterRoot extends Component {
         session.on('terminated', (cause) => {
 
             //if(session)
-            console.log('incoming call terminated', self.state.phoneState);
+            //console.log('incoming call terminated', self.state.phoneState);
 
 
             if (self.state.phoneState == STATE_READY) {
                 // Здесь делаем сохранение сессии
-                console.log('Terminated - case self.state.phoneState == STATE_READY')
+                //console.log('Terminated - case self.state.phoneState == STATE_READY')
 
             } else if (self.state.answer == false) {
-                console.log('Terminated - case self.state.answer == false')
+                //console.log('Terminated - case self.state.answer == false')
                 self.state.phoneState = STATE_READY;
             } else if (self.state.phoneState == STATE_GO_OFF) {
-                console.log('Terminated - case self.state.phoneState == STATE_GO_OFF')
+                //console.log('Terminated - case self.state.phoneState == STATE_GO_OFF')
                 self.state.phoneState = STATE_OFF;
             } else {
-                console.log('Terminated - case else')
+                //console.log('Terminated - case else')
                 self.state.phoneState = STATE_BUSY;
             }
             self.state.answer = false;
@@ -170,13 +170,13 @@ class CallcenterRoot extends Component {
             uri: c.name+'@'+c.url,
             transportOptions: {
                 wsServers: [c.ws],
-                //traceSip: true,
-                traceSip: false,
+                traceSip: true,
+                //traceSip: false,
                 maxReconnectionAttempts:1000000000
             },
             log:{
-                //level:'debug',
-                level:'warn',
+                level:'debug',
+                //level:'warn',
             },
             authorizationUser:  c.name,
             password:           c.password,
@@ -233,7 +233,7 @@ class CallcenterRoot extends Component {
         })
     }
     onClickPower = (e) => {
-        console.log('onClickPower', this.state)
+        //console.log('onClickPower', this.state)
         const self = this;
         if(this.state.phoneState == STATE_OFF){
             this.state.phoneState = STATE_GO_ON;
@@ -248,20 +248,20 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
-        console.log('clickCancel', this.state.phoneState)
+        //console.log('clickCancel', this.state.phoneState)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
         const self = this;
         if(this.state.phoneState == STATE_BUSY){
                 this.state.phoneState = STATE_READY;
                 this.state.callId = 0;
                 this.state.display = '';
-                console.log('OnClickCancel STATE_BUSY')
+                //console.log('OnClickCancel STATE_BUSY')
                 this.setState(this.state, () => {
                     if(self.state.queue.length>0){
-                        console.log('OnClickCancel QUEUE NOT EMPRY', self.state)
+                        //console.log('OnClickCancel QUEUE NOT EMPRY', self.state)
 
                         const session = self.state.queue.shift();
-                        console.log('session to be accepted', session)
+                        //console.log('session to be accepted', session)
                         self.acceptSession(session, self)
                     }
                 })
@@ -270,7 +270,7 @@ class CallcenterRoot extends Component {
             this.state.session = false;
             this.setState(this.state)
         }
-        console.log('OnClickCancel FINISH')
+        //console.log('OnClickCancel FINISH')
 
     };
     onClickAnswer = () => {
@@ -285,7 +285,7 @@ class CallcenterRoot extends Component {
             this.state.phoneState = STATE_GO_TALK;
             this.setState(this.state)
         }
-        console.log('cliclAccept')
+        //console.log('cliclAccept')
     }
     onClickHold = () => {
 
@@ -303,7 +303,7 @@ class CallcenterRoot extends Component {
             self.makeCall(phone, callId);
 
         }).fail((e) => {
-            console.log('callcenter/make-call', e)
+            console.error('callcenter/make-call', e)
         })
     }
     onClickInfo = (userId) => {
@@ -315,7 +315,7 @@ class CallcenterRoot extends Component {
              this.props.options.client.select
          ) {
             const ccc = window[this.props.options.client.select](id)
-             console.log(ccc)
+             //console.log(ccc)
              this.state.userId = id;
          }
     }
@@ -352,7 +352,7 @@ class CallcenterRoot extends Component {
             }
         })
         self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
-            console.log('Outgoing  call accepted', e, a, this);
+            //console.log('Outgoing  call accepted', e, a, this);
             self.state.soundPhoneRingback.pause();
             self.state.soundPhoneRingback.currentTime = 0;
 
@@ -375,7 +375,7 @@ class CallcenterRoot extends Component {
             self.logCall(10, 'Начало разговора');
         })
         self.state.session.on('failed', (e, cause) => {
-            console.log('Outgoing  call failed '+ cause);
+            //console.log('Outgoing  call failed '+ cause);
             if(cause==='Busy') {// Номер занят
                 self.logCall(3,"Номер занят", 0, cause);
             }else if (cause==='No Answer') { // Номер не отвечает
@@ -404,7 +404,7 @@ class CallcenterRoot extends Component {
             self.state.soundPhoneBeep.play();
         })
         self.state.session.on('terminated',(cause) => {
-            console.log('outgoing call terminated' + cause);
+            //console.log('outgoing call terminated' + cause);
             self.state.soundPhoneRingback.pause();
             self.state.soundPhoneRingback.currentTime = 0;
             if(self.state.phoneState == STATE_GO_OFF){
@@ -443,7 +443,7 @@ class CallcenterRoot extends Component {
                 comment:    comment,
                 data:       data,
             }).fail((e) => {
-                console.log('LogCall Error: ', e);
+                console.error('LogCall Error: ', e);
             })
     };
     closeModal = () => {
