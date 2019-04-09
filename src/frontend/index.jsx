@@ -62,12 +62,12 @@ class CallcenterRoot extends Component {
         s.session = session;
         s.phoneState = STATE_RINGING;
         s.display = s.session.remoteIdentity.displayName;
-        self.setState(s);
 
 
         //session.accept();
 
         session.on('accepted', function (e) {
+            console.log('OnAccepted Entering', session, self.state.phoneState);
 
             self.state.soundPhoneRing.pause();
             self.state.soundPhoneRing.currentTime = 0;
@@ -80,10 +80,10 @@ class CallcenterRoot extends Component {
                     remoteStream.addTrack(track);
                 }
             });
-            s.soundPhone.srcObject = remoteStream;
+            self.state.soundPhone.srcObject = remoteStream;
 
-            s.phoneState = STATE_TALKING;
-            self.setState(s);
+            self.state.phoneState = STATE_TALKING;
+            self.setState(self.state);
             console.log('Incoming call accepted', session);
             self.logCall(10, 'Начало разговора');
 
@@ -134,6 +134,9 @@ class CallcenterRoot extends Component {
             self.state.session = false;
             self.setState(self.state);
         });
+
+        self.setState(s);
+
     }
     componentDidMount(){
         const self = this;
@@ -330,7 +333,6 @@ class CallcenterRoot extends Component {
         self.state.callId = callId;
         self.state.display = phoneNumber;
         self.state.phoneState = STATE_CALLING;
-        self.setState(self.state)
         self.state.session = this.state.ua.invite(phoneNumber + '@'+this.props.options.sip.url, options);
         self.state.session.on('progress', (response) => {
 
@@ -410,6 +412,9 @@ class CallcenterRoot extends Component {
             self.setState(self.state);
 
         })
+
+        self.setState(self.state)
+
     }
     logCall = (event, comment, goal, data) => {
 
