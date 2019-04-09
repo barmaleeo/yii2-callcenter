@@ -115,7 +115,8 @@ class CallcenterRoot extends Component {
         session.on('terminated', (cause) => {
 
             //if(session)
-            console.log('incoming call terminated' + cause);
+            console.log('incoming call terminated', self.state.phoneState);
+
 
             if (self.state.phoneState == STATE_READY) {
                 // Здесь делаем сохранение сессии
@@ -240,7 +241,7 @@ class CallcenterRoot extends Component {
         }
     };
     onClickCancel = (e) => {
-        console.log('clickCancel', this)
+        console.log('clickCancel', this.state.phoneState)
         this.logCall(14, 'Нажата кнопка Завершить звонок');
         const self = this;
         if(this.state.phoneState == STATE_BUSY){
