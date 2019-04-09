@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "build-test": "^2.0.15",
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "sip.js": "^0.13.7"
   },
   "scripts": {
     "build-dev": "cross-env NODE_ENV=development webpack --color=true && rm -rf ../../../web/assets/*",
