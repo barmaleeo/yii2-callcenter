@@ -21,7 +21,7 @@
 
   "require": {
     "yiisoft/yii2": "~2.0.0",
-    "npm-asset/sip.js": "0.11.6",
+    "npm-asset/sip.js": "0.13.7",
     "npm-asset/react": "16.6.0",
     "npm-asset/react-dom": "16.6.0"
   },
@@ -34,11 +34,12 @@
       "barmaleeo\\callcenter\\": "src\\"
     }
   },
-  "repositories" : {
-    "type": "composer",
-    "url": "https://asset-packagist.org"
-  },
-
+  "repositories" :[
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
   "extra": {
     "bootstrap": "barmaleeo\\callcenter\\CallcenterBootstrap",
     "asset-installer-paths": {
