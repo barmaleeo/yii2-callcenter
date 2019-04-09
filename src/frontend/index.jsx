@@ -120,12 +120,16 @@ class CallcenterRoot extends Component {
 
             if (self.state.phoneState == STATE_READY) {
                 // Здесь делаем сохранение сессии
+                console.log('Terminated - case self.state.phoneState == STATE_READY')
 
             } else if (self.state.answer == false) {
+                console.log('Terminated - case self.state.answer == false')
                 self.state.phoneState = STATE_READY;
             } else if (self.state.phoneState == STATE_GO_OFF) {
+                console.log('Terminated - case self.state.phoneState == STATE_GO_OFF')
                 self.state.phoneState = STATE_OFF;
             } else {
+                console.log('Terminated - case else')
                 self.state.phoneState = STATE_BUSY;
             }
             self.state.answer = false;
