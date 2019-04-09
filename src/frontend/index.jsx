@@ -6,7 +6,7 @@ import Scripts  from './components/scripts/Scripts.jsx'
 import Client   from './components/client/Client.jsx'
 import Wiki     from './components/wiki/Wiki.jsx'
 import Phone    from './components/phone/Phone.jsx'
-import SIP      from 'sip.js'
+import * as SIP from 'sip.js'
 import Modal    from './components/modal/Modal'
 
 import {
