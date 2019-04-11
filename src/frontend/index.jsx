@@ -27,11 +27,13 @@ import './index.scss'
 
 
 class CallcenterRoot extends Component {
+
+    soundPhone          = document.getElementById('sound-phone');
+    soundPhoneRingback  = document.getElementById('sound-phone-ringback');
+    soundPhoneRing      = document.getElementById('sound-phone-ring');
+    soundPhoneBeep      = document.getElementById('sound-phone-beep');
+
     state = {
-        soundPhone:         document.getElementById('sound-phone'),
-        soundPhoneRingback: document.getElementById('sound-phone-ringback'),
-        soundPhoneRing:     document.getElementById('sound-phone-ring'),
-        soundPhoneBeep:     document.getElementById('sound-phone-beep'),
         session:false,
         phoneState:STATE_OFF,
         answer:false,
@@ -46,7 +48,7 @@ class CallcenterRoot extends Component {
         //console.log('ACCEPT SESSION', session, self);
 
 
-        const s = self.state;
+        const s = {};
 
         try {
             const stats = JSON.parse(session.request.headers['X-Stats'][0].raw);
@@ -58,7 +60,7 @@ class CallcenterRoot extends Component {
         }
 
         self.logCall(8, 'Включен сигнал вызова');
-        self.state.soundPhoneRing.play();
+        self.soundPhoneRing.play();
         s.session = session;
         s.phoneState = STATE_RINGING;
         s.display = s.session.remoteIdentity.displayName;
@@ -69,8 +71,8 @@ class CallcenterRoot extends Component {
         session.on('accepted', function (e) {
             //console.log('OnAccepted Entering', session, self.state.phoneState);
 
-            self.state.soundPhoneRing.pause();
-            self.state.soundPhoneRing.currentTime = 0;
+            self.soundPhoneRing.pause();
+            self.soundPhoneRing.currentTime = 0;
 
             const pc = session.sessionDescriptionHandler.peerConnection;
             const remoteStream = new MediaStream();
@@ -80,10 +82,9 @@ class CallcenterRoot extends Component {
                     remoteStream.addTrack(track);
                 }
             });
-            self.state.soundPhone.srcObject = remoteStream;
+            self.soundPhone.srcObject = remoteStream;
 
-            self.state.phoneState = STATE_TALKING;
-            self.setState(self.state);
+            self.setState({phoneState: STATE_TALKING});
             //console.log('Incoming call accepted', session);
             self.logCall(10, 'Начало разговора');
 
@@ -92,13 +93,13 @@ class CallcenterRoot extends Component {
             if (self.state.answer) {
                 self.logCall(3, "Неудачное завершение входящего звонка", 0, cause);
             }
-            self.state.soundPhoneBeep.currentTime = 0;
-            self.state.soundPhoneBeep.play();
+            self.soundPhoneBeep.currentTime = 0;
+            self.soundPhoneBeep.play();
         })
         session.on('bye', function (e) {
             self.logCall(13, 'Окончание разговора');
-            self.state.soundPhoneBeep.currentTime = 0;
-            self.state.soundPhoneBeep.play();
+            self.soundPhoneBeep.currentTime = 0;
+            self.soundPhoneBeep.play();
         })
         session.on('muted', (data) => {
             if (data.audio) {
@@ -116,7 +117,7 @@ class CallcenterRoot extends Component {
 
             //if(session)
             //console.log('incoming call terminated', self.state.phoneState);
-
+            const state = {}
 
             if (self.state.phoneState == STATE_READY) {
                 // Здесь делаем сохранение сессии
@@ -124,19 +125,19 @@ class CallcenterRoot extends Component {
 
             } else if (self.state.answer == false) {
                 //console.log('Terminated - case self.state.answer == false')
-                self.state.phoneState = STATE_READY;
+                state.phoneState = STATE_READY;
             } else if (self.state.phoneState == STATE_GO_OFF) {
                 //console.log('Terminated - case self.state.phoneState == STATE_GO_OFF')
-                self.state.phoneState = STATE_OFF;
+                state.phoneState = STATE_OFF;
             } else {
                 //console.log('Terminated - case else')
                 self.state.phoneState = STATE_BUSY;
             }
-            self.state.answer = false;
-            self.state.soundPhoneRing.pause();
-            self.state.soundPhoneRing.currentTime = 0;
-            self.state.session = false;
-            self.setState(self.state);
+            state.answer = false;
+            self.soundPhoneRing.pause();
+            self.soundPhoneRing.currentTime = 0;
+            state.session = false;
+            self.setState(state);
         });
 
         self.setState(s);
@@ -334,33 +335,37 @@ class CallcenterRoot extends Component {
                  'X-userid: ' + this.props.options.operator.id,
              ]
         };
-        self.state.callId = callId;
-        self.state.display = phoneNumber;
-        self.state.phoneState = STATE_CALLING;
+        const state = {
+            callId:     callId;
+            display:    phoneNumber;
+            phoneState: STATE_CALLING;
 
-        self.setState(self.state, () => {
+        }
 
-            self.state.session = self.state.ua.invite(phoneNumber + '@'+self.props.options.sip.url, options);
 
-            self.state.session.on('progress', (response) => {
 
+        self.setState(state, () => {
+            const session = self.state.ua.invite(phoneNumber + '@'+self.props.options.sip.url, options);
+
+            session.on('progress', (response) => {
+                const state = {}
                 self.logCall(2, 'Старт вызова, code:'+ response.status_code);  // старт вызова
                 if(response.status_code == 183 && self.state.phoneState == STATE_CALLING){
-                    self.state.phoneState = STATE_PROGRESS;
+                    state.phoneState = STATE_PROGRESS;
                     try {
-                        self.state.soundPhoneRingback.play();
+                        self.soundPhoneRingback.play();
                     }catch (e) {
                         console.log(e)
                     }
-                    self.setState(self.state)
+                    self.setState(state)
                 }
             })
-            self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
+            session.on('accepted', (e, a) => {  // поднятие трубки на том конце
                 //console.log('Outgoing  call accepted', e, a, this);
-                self.state.soundPhoneRingback.pause();
-                self.state.soundPhoneRingback.currentTime = 0;
+                self.soundPhoneRingback.pause();
+                self.soundPhoneRingback.currentTime = 0;
 
-                const pc = self.state.session.sessionDescriptionHandler.peerConnection;
+                const pc = session.sessionDescriptionHandler.peerConnection;
                 const remoteStream = new MediaStream();
                 pc.getReceivers().forEach(function (receiver) {
                     const track = receiver.track;
@@ -368,17 +373,16 @@ class CallcenterRoot extends Component {
                         remoteStream.addTrack(track);
                     }
                 });
-                self.state.soundPhone.srcObject = remoteStream;
+                self.soundPhone.srcObject = remoteStream;
                 try {
-                    self.state.soundPhone.play();
+                    self.soundPhone.play();
                 }catch (e) {
                     console.log(e)
                 }
-                self.state.phoneState = STATE_TALKING;
-                self.setState(self.state)
+                self.setState({phoneState:STATE_TALKING})
                 self.logCall(10, 'Начало разговора');
             })
-            self.state.session.on('failed', (e, cause) => {
+            session.on('failed', (e, cause) => {
                 //console.log('Outgoing  call failed '+ cause);
                 if(cause==='Busy') {// Номер занят
                     self.logCall(3,"Номер занят", 0, cause);
@@ -387,30 +391,30 @@ class CallcenterRoot extends Component {
                 }else { // ошибка соединения
                     self.logCall(1, "Ошибка соединения", 0, cause);
                 }
-                self.state.soundPhoneBeep.currentTime = 0;
-                self.state.soundPhoneBeep.play();
+                self.soundPhoneBeep.currentTime = 0;
+                self.soundPhoneBeep.play();
             })
-            self.state.session.on ('muted', (data) => {
+            session.on ('muted', (data) => {
                 if (data.audio) {
                     self.logCall(17, 'Сall is Muted');
                 }
             });
 
-            self.state.session.on ('unmuted', (data) => {
+            session.on ('unmuted', (data) => {
                 if (data.audio) {
                     self.logCall(18, 'Сall is Unmuted');
                 }
             });
 
-            self.state.session.on('bye', (e) => {
+            session.on('bye', (e) => {
                 self.logCall(13,'Окончание разговора');
-                self.state.soundPhoneBeep.currentTime = 0;
-                self.state.soundPhoneBeep.play();
+                self.soundPhoneBeep.currentTime = 0;
+                self.soundPhoneBeep.play();
             })
-            self.state.session.on('terminated',(cause) => {
+            session.on('terminated',(cause) => {
                 //console.log('outgoing call terminated' + cause);
-                self.state.soundPhoneRingback.pause();
-                self.state.soundPhoneRingback.currentTime = 0;
+                self.soundPhoneRingback.pause();
+                self.soundPhoneRingback.currentTime = 0;
                 if(self.state.phoneState == STATE_GO_OFF){
                     self.state.phoneState = STATE_OFF;
                 }else{
@@ -420,6 +424,7 @@ class CallcenterRoot extends Component {
                 self.setState(self.state);
 
             })
+            self.SetState({session:session})
 
         })
 
