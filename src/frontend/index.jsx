@@ -337,88 +337,93 @@ class CallcenterRoot extends Component {
         self.state.callId = callId;
         self.state.display = phoneNumber;
         self.state.phoneState = STATE_CALLING;
-        self.state.session = this.state.ua.invite(phoneNumber + '@'+this.props.options.sip.url, options);
 
-        self.state.session.on('progress', (response) => {
+        self.setState(self.state, () => {
 
-            self.logCall(2, 'Старт вызова, code:'+ response.status_code);  // старт вызова
-            if(response.status_code == 183 && self.state.phoneState == STATE_CALLING){
-                self.state.phoneState = STATE_PROGRESS;
+            self.state.session = self.state.ua.invite(phoneNumber + '@'+self.props.options.sip.url, options);
+
+            self.state.session.on('progress', (response) => {
+
+                self.logCall(2, 'Старт вызова, code:'+ response.status_code);  // старт вызова
+                if(response.status_code == 183 && self.state.phoneState == STATE_CALLING){
+                    self.state.phoneState = STATE_PROGRESS;
+                    try {
+                        self.state.soundPhoneRingback.play();
+                    }catch (e) {
+                        console.log(e)
+                    }
+                    self.setState(self.state)
+                }
+            })
+            self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
+                //console.log('Outgoing  call accepted', e, a, this);
+                self.state.soundPhoneRingback.pause();
+                self.state.soundPhoneRingback.currentTime = 0;
+
+                const pc = self.state.session.sessionDescriptionHandler.peerConnection;
+                const remoteStream = new MediaStream();
+                pc.getReceivers().forEach(function (receiver) {
+                    const track = receiver.track;
+                    if (track) {
+                        remoteStream.addTrack(track);
+                    }
+                });
+                self.state.soundPhone.srcObject = remoteStream;
                 try {
-                    self.state.soundPhoneRingback.play();
+                    self.state.soundPhone.play();
                 }catch (e) {
                     console.log(e)
                 }
+                self.state.phoneState = STATE_TALKING;
                 self.setState(self.state)
-            }
-        })
-        self.state.session.on('accepted', (e, a) => {  // поднятие трубки на том конце
-            //console.log('Outgoing  call accepted', e, a, this);
-            self.state.soundPhoneRingback.pause();
-            self.state.soundPhoneRingback.currentTime = 0;
-
-            const pc = self.state.session.sessionDescriptionHandler.peerConnection;
-            const remoteStream = new MediaStream();
-            pc.getReceivers().forEach(function (receiver) {
-                const track = receiver.track;
-                if (track) {
-                    remoteStream.addTrack(track);
+                self.logCall(10, 'Начало разговора');
+            })
+            self.state.session.on('failed', (e, cause) => {
+                //console.log('Outgoing  call failed '+ cause);
+                if(cause==='Busy') {// Номер занят
+                    self.logCall(3,"Номер занят", 0, cause);
+                }else if (cause==='No Answer') { // Номер не отвечает
+                    self.logCall(4, "Номер не отвечает", 0,  cause)
+                }else { // ошибка соединения
+                    self.logCall(1, "Ошибка соединения", 0, cause);
+                }
+                self.state.soundPhoneBeep.currentTime = 0;
+                self.state.soundPhoneBeep.play();
+            })
+            self.state.session.on ('muted', (data) => {
+                if (data.audio) {
+                    self.logCall(17, 'Сall is Muted');
                 }
             });
-            self.state.soundPhone.srcObject = remoteStream;
-            try {
-                self.state.soundPhone.play();
-            }catch (e) {
-                console.log(e)
-            }
-            self.state.phoneState = STATE_TALKING;
-            self.setState(self.state)
-            self.logCall(10, 'Начало разговора');
-        })
-        self.state.session.on('failed', (e, cause) => {
-            //console.log('Outgoing  call failed '+ cause);
-            if(cause==='Busy') {// Номер занят
-                self.logCall(3,"Номер занят", 0, cause);
-            }else if (cause==='No Answer') { // Номер не отвечает
-                self.logCall(4, "Номер не отвечает", 0,  cause)
-            }else { // ошибка соединения
-                self.logCall(1, "Ошибка соединения", 0, cause);
-            }
-            self.state.soundPhoneBeep.currentTime = 0;
-            self.state.soundPhoneBeep.play();
-        })
-        self.state.session.on ('muted', (data) => {
-            if (data.audio) {
-                self.logCall(17, 'Сall is Muted');
-            }
-        });
 
-        self.state.session.on ('unmuted', (data) => {
-            if (data.audio) {
-                self.logCall(18, 'Сall is Unmuted');
-            }
-        });
+            self.state.session.on ('unmuted', (data) => {
+                if (data.audio) {
+                    self.logCall(18, 'Сall is Unmuted');
+                }
+            });
 
-        self.state.session.on('bye', (e) => {
-            self.logCall(13,'Окончание разговора');
-            self.state.soundPhoneBeep.currentTime = 0;
-            self.state.soundPhoneBeep.play();
-        })
-        self.state.session.on('terminated',(cause) => {
-            //console.log('outgoing call terminated' + cause);
-            self.state.soundPhoneRingback.pause();
-            self.state.soundPhoneRingback.currentTime = 0;
-            if(self.state.phoneState == STATE_GO_OFF){
-                self.state.phoneState = STATE_OFF;
-            }else{
-                self.state.phoneState = STATE_BUSY;
-            }
-            self.state.session = false;
-            self.setState(self.state);
+            self.state.session.on('bye', (e) => {
+                self.logCall(13,'Окончание разговора');
+                self.state.soundPhoneBeep.currentTime = 0;
+                self.state.soundPhoneBeep.play();
+            })
+            self.state.session.on('terminated',(cause) => {
+                //console.log('outgoing call terminated' + cause);
+                self.state.soundPhoneRingback.pause();
+                self.state.soundPhoneRingback.currentTime = 0;
+                if(self.state.phoneState == STATE_GO_OFF){
+                    self.state.phoneState = STATE_OFF;
+                }else{
+                    self.state.phoneState = STATE_BUSY;
+                }
+                self.state.session = false;
+                self.setState(self.state);
+
+            })
 
         })
 
-        self.setState(self.state)
+
 
     }
     logCall = (event, comment, goal, data) => {
