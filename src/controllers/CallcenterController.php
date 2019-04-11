@@ -70,7 +70,17 @@ class CallcenterController extends \yii\base\Controller
 
     public function actionMakeCall(){
         $id = \Yii::$app->request->get('id', 0);
-        \Yii::$app->response->data = json_encode(Call::makeOutcall($id));
+        if($call = Call::makeOutcall($id)){
+
+            $pid = pcntl_fork();
+            if (!$pid) {
+                Yii::$app->websockets->sendMessage( "callcenter", $call->id, 0, 'remove_outcall');
+                \Yii::$app->end();
+            }else {
+                \Yii::$app->response->data = json_encode($call);
+            }
+
+        }
     }
     
     

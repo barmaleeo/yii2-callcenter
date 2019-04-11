@@ -342,8 +342,6 @@ class CallcenterRoot extends Component {
 
         }
 
-
-
         self.setState(state, () => {
             const session = self.state.ua.invite(phoneNumber + '@'+self.props.options.sip.url, options);
 
@@ -427,8 +425,6 @@ class CallcenterRoot extends Component {
             self.setState({session:session})
 
         })
-
-
 
     }
     logCall = (event, comment, goal, data) => {

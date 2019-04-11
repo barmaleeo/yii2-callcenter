@@ -181,7 +181,10 @@ class Call extends \yii\db\ActiveRecord
             $log->event_id  = CallLog::CALL_EVENT_MAKE_OUTCALL;
             $res = $log->save(false);
 
-            Yii::$app->websockets->sendMessage( "callcenter", $call->id, 0, 'remove_outcall');
+            return $call;
+
+        }else{
+            return false;
         }
     }
     
