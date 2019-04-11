@@ -424,7 +424,7 @@ class CallcenterRoot extends Component {
                 self.setState(self.state);
 
             })
-            self.SetState({session:session})
+            self.setState({session:session})
 
         })
 
