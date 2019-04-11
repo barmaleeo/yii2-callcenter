@@ -321,6 +321,8 @@ class CallcenterRoot extends Component {
          }
     }
     makeCall(phoneNumber, callId){
+        console.log(new Date(), "!!!!!!! Start MakeCall")
+
         const self = this;
         if(self.state.phoneState != STATE_READY){
             return;
@@ -341,11 +343,16 @@ class CallcenterRoot extends Component {
             phoneState: STATE_CALLING,
 
         }
+        console.log(new Date(), "!!!!!!! Before SetState MakeCall")
 
         self.setState(state, () => {
+            console.log(new Date(), "!!!!!!! Before Invite MakeCall")
+
             const session = self.state.ua.invite(phoneNumber + '@'+self.props.options.sip.url, options);
+            console.log(new Date(), "!!!!!!! After Invite MakeCall")
 
             session.on('progress', (response) => {
+                console.log(new Date(), "!!!!!!! Start Progress MakeCall")
                 const state = {}
                 self.logCall(2, 'Старт вызова, code:'+ response.statusCode);  // старт вызова
                 if(response.statusCode == 183 && self.state.phoneState == STATE_CALLING){
@@ -359,6 +366,7 @@ class CallcenterRoot extends Component {
                 }
             })
             session.on('accepted', (e, a) => {  // поднятие трубки на том конце
+                console.log(new Date(), "!!!!!!! Start Accepted MakeCall")
                 //console.log('Outgoing  call accepted', e, a, this);
                 self.soundPhoneRingback.pause();
                 self.soundPhoneRingback.currentTime = 0;
