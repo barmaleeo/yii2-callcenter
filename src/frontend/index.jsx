@@ -336,9 +336,9 @@ class CallcenterRoot extends Component {
              ]
         };
         const state = {
-            callId:     callId;
-            display:    phoneNumber;
-            phoneState: STATE_CALLING;
+            callId:     callId,
+            display:    phoneNumber,
+            phoneState: STATE_CALLING,
 
         }
 
