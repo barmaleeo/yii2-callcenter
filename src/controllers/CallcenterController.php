@@ -75,7 +75,7 @@ class CallcenterController extends \yii\base\Controller
             //$pid = pcntl_fork();
             //if (!$pid) {
             \Yii::warning("before Yii::$app->websockets->sendMessage");
-                Yii::$app->websockets->sendMessage( "callcenter", $call->id, 0, 'remove_outcall');
+                \Yii::$app->websockets->sendMessage( "callcenter", $call->id, 0, 'remove_outcall');
             \Yii::warning("after Yii::$app->websockets->sendMessage");
 
             //\Yii::$app->end();
