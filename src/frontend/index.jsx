@@ -349,8 +349,8 @@ class CallcenterRoot extends Component {
 
             session.on('progress', (response) => {
                 const state = {}
-                self.logCall(2, 'Старт вызова, code:'+ response.statusСode);  // старт вызова
-                if(response.statusСode == 183 && self.state.phoneState == STATE_CALLING){
+                self.logCall(2, 'Старт вызова, code:'+ response.statusCode);  // старт вызова
+                if(response.statusCode == 183 && self.state.phoneState == STATE_CALLING){
                     state.phoneState = STATE_PROGRESS;
                     try {
                         self.soundPhoneRingback.play();
