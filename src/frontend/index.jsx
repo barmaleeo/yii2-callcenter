@@ -160,6 +160,7 @@ class CallcenterRoot extends Component {
 
         const options = {
             sessionDescriptionHandlerOptions: {
+                iceCheckingTimeout: 500,
                 constraints: {audio: true, video: false},
             }//,
             // extraHeaders:[
@@ -280,6 +281,7 @@ class CallcenterRoot extends Component {
             this.state.answer = true;
             this.state.session.accept({
                 sessionDescriptionHandlerOptions: {
+                    iceCheckingTimeout: 500,
                     constraints: {audio: true, video: false},
                 },
             })
@@ -329,6 +331,7 @@ class CallcenterRoot extends Component {
         }
         const options = {
             sessionDescriptionHandlerOptions: {
+                iceCheckingTimeout: 500,
                 constraints: {audio: true, video: false},
             },
              extraHeaders: [

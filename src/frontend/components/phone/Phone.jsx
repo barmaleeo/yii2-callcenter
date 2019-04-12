@@ -118,7 +118,7 @@ export default class Phone extends Component {
         
         const cancelEnabled = (ps == STATE_PROGRESS || ps == STATE_RINGING || ps == STATE_TALKING ||
             ps == STATE_GO_TALK || ps == STATE_ENDING || ps == STATE_BUSY)
-        console.log('Phone render ', cancelEnabled, ps)
+        console.log(new Date(), 'Phone render ', cancelEnabled, ps)
         let powerClass;
         switch (ps){
             case STATE_OFF:
