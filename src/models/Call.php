@@ -32,6 +32,7 @@ class Call extends \yii\db\ActiveRecord
 
     const STATUS_READY              = 0;   //  status = 0 - введен, активный статус
     const STATUS_RINGING            = 64;  //  status = 64 - входящий звонок
+    const STATUS_MAKE_OUTCALL       = 65;  //  status = 65 - взято задание на исходящий звонок
     const STATUS_CALLING            = 72;  //  status = 72 - старт вызова
     const STATUS_RECORD_MSG         = 73;  //  status = 73 - запись на автоответчик
     const STATUS_TAKEN              = 96;  //  status = 96 - Начало разговора
@@ -171,7 +172,7 @@ class Call extends \yii\db\ActiveRecord
     public static function makeOutcall($id){
 
         if($call = parent::findOne(['call.id' => $id, 'call.status_id' => Call::STATUS_READY])) {
-            $call->status_id = Call::STATUS_TAKEN;
+            $call->status_id = Call::STATUS_MAKE_OUTCALL;
             $call->op_id = Yii::$app->getUser()->getId();
             $call->save(false);
 
@@ -194,7 +195,7 @@ class Call extends \yii\db\ActiveRecord
 
         Yii::warning('startOutcall'.json_encode(ArrayHelper::toArray($calll)));
 
-        if($call = parent::findOne(['call.id' => $params['callid'], 'call.status_id' => Call::STATUS_TAKEN])){
+        if($call = parent::findOne(['call.id' => $params['callid'], 'call.status_id' => Call::STATUS_MAKE_OUTCALL])){
 
             $call->uuid      = $params['uuid'];
             $call->status_id = Call::STATUS_CALLING;

@@ -357,7 +357,7 @@ class CallcenterRoot extends Component {
             session.on('progress', (response) => {
                 console.log(new Date(), "!!!!!!! Start Progress MakeCall")
                 const state = {}
-                self.logCall(2, 'Старт вызова, code:'+ response.statusCode);  // старт вызова
+                //self.logCall(2, 'Старт вызова, code:'+ response.statusCode);  // старт вызова
                 if(response.statusCode == 183 && self.state.phoneState == STATE_CALLING){
                     state.phoneState = STATE_PROGRESS;
                     try {
