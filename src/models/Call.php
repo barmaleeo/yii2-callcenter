@@ -398,6 +398,7 @@ class Call extends \yii\db\ActiveRecord
                 $enable_time = '1970-01-01 00:00:00';
             }
 
+
             if (!$call) { //-------------------------------------------------------------------------
                 $call = new static([
                     'user_id'       => $user_id,
