@@ -394,6 +394,9 @@ class Call extends \yii\db\ActiveRecord
                 'call.status_id' => static::STATUS_READY,
             ]);
 
+            if($enable_time == null){
+                $enable_time = '1970-01-01 00:00:00';
+            }
 
             if (!$call) { //-------------------------------------------------------------------------
                 $call = new static([
