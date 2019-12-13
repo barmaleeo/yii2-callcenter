@@ -184,7 +184,7 @@ class CallcenterRoot extends Component {
             password:           c.password,
             hackIpInContact:    false,
             hackWssInTransport: false,
-            hackViaTcp:         false
+            hackViaTcp:         false,
             sessionDescriptionHandlerFactoryOptions: {
                 peerConnectionOptions: {
                     // rtcConfiguration: {
