@@ -185,6 +185,21 @@ class CallcenterRoot extends Component {
             hackIpInContact:    false,
             hackWssInTransport: false,
             hackViaTcp:         false
+            sessionDescriptionHandlerFactoryOptions: {
+                peerConnectionOptions: {
+                    // rtcConfiguration: {
+                    //     // iceServers: [
+                    //     //     { urls: "stun:stun.l.google.com:19302" },
+                    //     //     {
+                    //     //         urls: "turn:turn-ip:443?transport=tcp",
+                    //     //         username: "turnuser",
+                    //     //         credential: "turnpass"
+                    //     //     }
+                    //     // ]
+                    // },
+                    iceCheckingTimeout: 200,
+                }
+            }
 
         })
         s.ua.on('invite', (session) => {
@@ -333,6 +348,9 @@ class CallcenterRoot extends Component {
             sessionDescriptionHandlerOptions: {
                 iceCheckingTimeout: 500,
                 constraints: {audio: true, video: false},
+                peerConnectionOptions: {
+                    iceCheckingTimeout: 500,
+                }
             },
              extraHeaders: [
                  'X-user-domain: ' + this.props.options.sip.url,
